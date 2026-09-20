@@ -64,36 +64,8 @@ function saveData() {
 
 //Print the Receipt
 function printData() {
-
-    const electron = require('electron');
-    const BrowserWindow = electron.remote.BrowserWindow;
-    const path = require('path');
-    var options = {
-        silent: false,
-        printBackground: true,
-        color: false,
-        margin: {
-            marginType: 'printableArea'
-        },
-        landscape: false,
-        pagesPerSheet: 1,
-        collate: false,
-        copies: 1,
-        header: 'Header of the Page',
-        footer: 'Footer of the Page'
-    }
-
-    // Defining a new BrowserWindow Instance
-    //Here show = false. So the page will not be displayed. It will just be opened in the backend
-    let win = new BrowserWindow({
-        show: false,
-        webPreferences: {
-            nodeIntegration: true
-        }
-    });
-
-    //load the page for receipt
-    win.loadURL(path.join(__dirname, 'receipt.html'));
+    const { ipcRenderer } = require('electron');
+    ipcRenderer.send('print-receipt');
 }
 
 

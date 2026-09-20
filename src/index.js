@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 //These two lines allow the image to be displayed in the packaged app
 import { addBypassChecker } from 'electron-compile';
 addBypassChecker((filePath) => { return filePath.indexOf(app.getAppPath()) === -1 && (/.jfif/.test(filePath)); })
@@ -11,6 +11,17 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
+
+ipcMain.on('print-receipt', () => {
+  const receiptWindow = new BrowserWindow({
+    show: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  receiptWindow.loadFile(`${__dirname}/receipt.html`);
+});
 
 const createWindow = () => {
   // Create the browser window.

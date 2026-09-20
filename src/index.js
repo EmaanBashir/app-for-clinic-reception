@@ -402,7 +402,6 @@ const createWindow = () => {
   mainWindow.maximize();
   mainWindow.show();
   mainWindow.loadURL(`file://${__dirname}/login.html`);
-  mainWindow.webContents.openDevTools();
 
   mainWindow.on('closed', () => {
     mainWindow = null;

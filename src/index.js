@@ -393,7 +393,7 @@ const createWindow = () => {
     show: false,
     webPreferences: {
       preload: `${__dirname}/preload.js`,
-      nodeIntegration: true,
+      nodeIntegration: false,
       contextIsolation: false,
       devTools: true
     }

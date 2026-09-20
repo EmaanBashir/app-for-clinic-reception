@@ -136,14 +136,16 @@
 
   </div>
 
+  <script src="./js/jquery.min.js"></script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="./js/main.js"></script>
   <script src="./js/savePrint.js"></script>
   <script src="./js/next.js"></script>
-  <script> window.$ = window.jQuery = require('./js/jquery.min.js'); </script>
   <script>
     let receptionistField = document.querySelector("#receptionist");
-
+  
     let receptionistName = sessionStorage.getItem("receptionistName");
-
+  
     if (receptionistName) {
       receptionistField.value = receptionistName;
     }

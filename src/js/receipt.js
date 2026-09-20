@@ -24,7 +24,7 @@ window.electronAPI.getLatestReceipt().then((result) => {
     document.querySelector("#date1").innerHTML = dateTime;
     document.querySelector("#fee1").innerHTML = consultation.fee;
     document.querySelector("#receptionist").innerHTML = consultation.receptionist || '';
-    document.querySelector("#receiptDateTime").innerHTML = dateTime;
+    document.querySelector("#receptionist1").innerHTML = consultation.receptionist || '';
 
     switch (consultation.consultantId) {
         case 0:

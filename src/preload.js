@@ -9,5 +9,11 @@ window.electronAPI = {
         password
     }),
 
-    getLatestReceipt: () => ipcRenderer.invoke('get-latest-receipt')
+    getLatestReceipt: () => ipcRenderer.invoke('get-latest-receipt'),
+
+getConsultations: (consultantId, month) =>
+    ipcRenderer.invoke('get-consultations', {
+        consultantId,
+        month
+    })
 };

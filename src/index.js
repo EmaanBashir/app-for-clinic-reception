@@ -153,6 +153,61 @@ ipcMain.handle('get-latest-receipt', () => {
   });
 });
 
+ipcMain.handle('get-consultations', (event, { consultantId, month }) => {
+  return new Promise((resolve) => {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null,
+      database: 'eyemed_db'
+    });
+
+    connection.connect((err) => {
+      if (err) {
+        console.log(err.stack);
+        resolve({
+          success: false,
+          error: 'Database connection failed'
+        });
+        return;
+      }
+
+      const selectedDate = new Date(month);
+      const selectedMonth = selectedDate.getMonth() + 1;
+      const selectedYear = selectedDate.getFullYear();
+
+      const query = `
+        SELECT * FROM Consultations
+        INNER JOIN Patients ON patientId = id
+        WHERE consultantId = "${consultantId}"
+        AND YEAR(Consultations.date) = "${selectedYear}"
+        AND MONTH(Consultations.date) = "${selectedMonth}"
+        ORDER BY consultationId DESC;
+      `;
+
+      connection.query(query, (err, rows) => {
+        connection.end();
+
+        if (err) {
+          console.log('An error occurred performing the query.');
+          console.log(err.stack);
+
+          resolve({
+            success: false,
+            error: 'Consultation query failed'
+          });
+          return;
+        }
+
+        resolve({
+          success: true,
+          rows
+        });
+      });
+    });
+  });
+});
+
 ipcMain.on('print-receipt', () => {
   console.log('1. Received print-receipt');
 

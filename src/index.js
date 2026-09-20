@@ -204,7 +204,7 @@ ipcMain.on('print-receipt', () => {
     webPreferences: {
       preload: `${__dirname}/preload.js`,
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
       devTools: false
     }
   });
@@ -394,7 +394,7 @@ const createWindow = () => {
     webPreferences: {
       preload: `${__dirname}/preload.js`,
       nodeIntegration: false,
-      contextIsolation: false,
+      contextIsolation: true,
       devTools: true
     }
   });

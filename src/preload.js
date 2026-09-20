@@ -1,6 +1,6 @@
-const { ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
-window.electronAPI = {
+contextBridge.exposeInMainWorld('electronAPI', {
     printReceipt: () => ipcRenderer.send('print-receipt'),
     receiptReady: () => ipcRenderer.send('print-receipt-ready'),
 
@@ -19,4 +19,4 @@ window.electronAPI = {
 
     getConsultations: (consultantId, month) =>
         ipcRenderer.invoke('get-consultations', consultantId, month)
-};
+});

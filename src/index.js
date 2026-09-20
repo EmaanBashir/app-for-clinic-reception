@@ -211,7 +211,6 @@ ipcMain.on('print-receipt', () => {
 
   receiptWindow.loadFile(`${__dirname}/receipt.html`);
 
-  receiptWindow.webContents.openDevTools();
 
   receiptWindow.webContents.on('did-finish-load', () => {
     console.log('2. Receipt page finished loading');
@@ -395,7 +394,7 @@ const createWindow = () => {
       preload: `${__dirname}/preload.js`,
       nodeIntegration: false,
       contextIsolation: true,
-      devTools: true
+      devTools: false
     }
   });
 

@@ -64,6 +64,95 @@ ipcMain.handle('login', (event, { username, password }) => {
   });
 });
 
+ipcMain.handle('get-latest-receipt', () => {
+  return new Promise((resolve) => {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null,
+      database: 'eyemed_db'
+    });
+
+    connection.connect((err) => {
+      if (err) {
+        console.log(err.stack);
+        resolve({
+          success: false,
+          error: 'Database connection failed'
+        });
+        return;
+      }
+
+      const consultationQuery = `
+        SELECT patientId, consultantId, fee, date, receptionist
+        FROM Consultations
+        ORDER BY consultationId DESC
+        LIMIT 1;
+      `;
+
+      connection.query(consultationQuery, (err, consultationRows) => {
+        if (err) {
+          console.log('An error occurred performing the consultation query.');
+          console.log(err.stack);
+          connection.end();
+
+          resolve({
+            success: false,
+            error: 'Consultation query failed'
+          });
+          return;
+        }
+
+        if (consultationRows.length === 0) {
+          connection.end();
+
+          resolve({
+            success: false,
+            error: 'No consultation found'
+          });
+          return;
+        }
+
+        const consultation = consultationRows[0];
+
+        const patientQuery = `
+          SELECT * FROM Patients
+          WHERE id = "${consultation.patientId}";
+        `;
+
+        connection.query(patientQuery, (err, patientRows) => {
+          connection.end();
+
+          if (err) {
+            console.log('An error occurred performing the patient query.');
+            console.log(err.stack);
+
+            resolve({
+              success: false,
+              error: 'Patient query failed'
+            });
+            return;
+          }
+
+          if (patientRows.length === 0) {
+            resolve({
+              success: false,
+              error: 'Patient not found'
+            });
+            return;
+          }
+
+          resolve({
+            success: true,
+            consultation,
+            patient: patientRows[0]
+          });
+        });
+      });
+    });
+  });
+});
+
 ipcMain.on('print-receipt', () => {
   console.log('1. Received print-receipt');
 

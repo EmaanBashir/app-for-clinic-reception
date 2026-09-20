@@ -7,5 +7,7 @@ window.electronAPI = {
     login: (username, password) => ipcRenderer.invoke('login', {
         username,
         password
-    })
+    }),
+
+    getLatestReceipt: () => ipcRenderer.invoke('get-latest-receipt')
 };

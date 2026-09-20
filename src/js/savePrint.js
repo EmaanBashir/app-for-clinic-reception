@@ -5,12 +5,13 @@ function saveData() {
 
     let patientId = document.querySelector('#patientId').value;
     let name = document.querySelector('#patientName').value;
-    let age = document.querySelector('#patientAge').value;
+    let dob = document.querySelector('#patientDOB').value;
     let gender = document.querySelector('#patientGender').value;
     let address = document.querySelector('#patientAddress').value;
     let phone = document.querySelector('#patientPhone').value;
     let fee = document.querySelector('#fee').value;
     let consultantId = document.querySelector('#consultant').value;
+    let receptionist = document.querySelector('#receptionist').value;
 
     let query = `SELECT * FROM Patients WHERE id = "${patientId}";`
 
@@ -21,7 +22,7 @@ function saveData() {
             return;
         }
         if (rows.length > 0) {
-            query = `UPDATE Patients SET name = "${name}", age = "${age}", gender = "${gender}", address = "${address}", phone = "${phone}" WHERE id = "${patientId}";`
+            query = `UPDATE Patients SET name = "${name}", dob = "${dob}", gender = "${gender}", address = "${address}", phone = "${phone}" WHERE id = "${patientId}";`
 
             connection.query(query, (err, rows, fields) => {
                 if (err) {
@@ -32,7 +33,7 @@ function saveData() {
 
             });
         } else {
-            query = `INSERT INTO Patients (id, name, age, gender, address, phone) VALUES ("${patientId}", "${name}", "${age}", "${gender}", "${address}", "${phone}");`
+            query = `INSERT INTO Patients (id, name, dob, gender, address, phone) VALUES ("${patientId}", "${name}", "${dob}", "${gender}", "${address}", "${phone}");`
 
             connection.query(query, (err, rows, fields) => {
                 if (err) {
@@ -44,7 +45,11 @@ function saveData() {
         }
     });
 
-    query = `INSERT INTO Consultations (patientId, consultantId, fee) VALUES ("${patientId}", "${consultantId}", "${fee}");`
+    query = `INSERT INTO Consultations 
+    (patientId, consultantId, fee, receptionist) 
+    VALUES 
+    ("${patientId}", "${consultantId}", "${fee}", "${receptionist}");`
+
 
     connection.query(query, (err, rows, fields) => {
         if (err) {

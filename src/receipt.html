@@ -1,104 +1,410 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-</head>
-
-<body>
-
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPD Payment Slip</title>
+    
+    <link rel="stylesheet" type="text/css"
+        href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    
+    <style>
+    
+        .receipt-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 35px;
+            padding: 0 5px;
+        }
+    
+        .receipt-footer .date-time {
+            text-align: left;
+        }
+    
+        .receipt-footer .receptionist {
+            text-align: right;
+            min-width: 180px;
+        }
+    
+    </style>
+    
+    </head> <body>
     <div class="container">
+    
         <div class="row mt-5">
-            <div class="col-xs-12">
+    
+            <div class="col-12">
+    
+                <!-- Clinic Header -->
                 <div class="invoice-title mt-5">
-                    <h4 class="pull-right">EYE MED CLINIC</h4>
-                    <h6>IMRAN KHAN AVENUE, CHAKLALA SCHEME 3, RAWALPINDI</h6>
-                    <h6>0331-1393633</h6>
+    
+                    <h4 class="text-end">
+                        EYE MED CLINIC
+                    </h4>
+    
+                    <h6>
+                        IMRAN KHAN AVENUE, CHAKLALA SCHEME 3, RAWALPINDI
+                    </h6>
+    
+                    <h6>
+                        0331-1393633
+                    </h6>
+    
                 </div>
-                <h3 class="text-center "><u>OPD Payment Slip</u></h3>
+    
+    
+                <h3 class="text-center">
+                    <u>OPD Payment Slip</u>
+                </h3>
+    
                 <hr>
-                <h5><u>Patients Copy</u></h5>
-                <div class="border border-dark row py-2">
-                    <div class="row">
-                        <h6 class="d-inline-block w-25">MR No.&nbsp; <span id="mrNo"></span></h6>
-                        <h6 class="d-inline-block w-50">Patient Name: &nbsp; <span id="name"
-                                class="text-uppercase"></span></h6>
-                        <h6 class="d-inline-block text-end w-25">Age: &nbsp;<span id="age"></span></h6>
+    
+    
+                <!-- ========================= -->
+                <!-- PATIENT COPY -->
+                <!-- ========================= -->
+    
+                <h5>
+                    <u>Patients Copy</u>
+                </h5>
+    
+    
+                <div class="border border-dark py-2 px-2">
+    
+                    <!-- Patient information -->
+                    <div class="row align-items-center">
+    
+                        <div class="col-2">
+    
+                            <h6 class="mb-0">
+                                MR No.&nbsp;
+                                <span id="mrNo"></span>
+                            </h6>
+    
+                        </div>
+    
+    
+                        <div class="col-5">
+    
+                            <h6 class="mb-0">
+                                Patient Name:&nbsp;
+                                <span id="name"
+                                    class="text-uppercase"></span>
+                            </h6>
+    
+                        </div>
+    
+    
+                        <div class="col-5">
+    
+                            <h6 class="mb-0 text-end text-nowrap">
+                                Date of Birth:&nbsp;
+                                <span id="dob"></span>
+                            </h6>
+    
+                        </div>
+    
                     </div>
+    
+    
                     <hr>
-                    <div class="row">
-                        <address class="d-inline-block w-50 pe-2"><strong>Address: &nbsp; </strong><span id="address"
-                                class="d-inline-block"></span></address>
-                        <address class="d-inline-block w-25"><strong>Ph: &nbsp; </strong><span
-                                id="phone"></span></address>
-                        <address class="d-inline-block text-end w-25"><strong>Gender: &nbsp;</strong><span
-                                id="gender"></span></address>
-                    </div>
-                    <div class="row mt-5">
+    
+    
+                    <!-- Contact information -->
+                    <div class="row align-items-center">
+    
                         <div class="col-6">
-                            <address>
-                                <strong>Consultant:</strong><span id="consultant" class="text-uppercase"></span>
+    
+                            <address class="mb-0 pe-2">
+    
+                                <strong>
+                                    Address:&nbsp;
+                                </strong>
+    
+                                <span id="address"></span>
+    
                             </address>
-                            <address>
-                                <strong>Speciality:</strong> <span id="speciality" class="text-uppercase"></span>
-                            </address>
+    
                         </div>
+    
+    
+                        <div class="col-3">
+    
+                            <address class="mb-0">
+    
+                                <strong>
+                                    Ph:&nbsp;
+                                </strong>
+    
+                                <span id="phone"></span>
+    
+                            </address>
+    
+                        </div>
+    
+    
+                        <div class="col-3">
+    
+                            <address class="mb-0 text-end">
+    
+                                <strong>
+                                    Gender:&nbsp;
+                                </strong>
+    
+                                <span id="gender"></span>
+    
+                            </address>
+    
+                        </div>
+    
+                    </div>
+    
+    
+                    <!-- Consultant information -->
+                    <div class="row mt-5">
+    
+                        <div class="col-6">
+    
+                            <address>
+    
+                                <strong>
+                                    Consultant:
+                                </strong>
+    
+                                <span id="consultant"
+                                    class="text-uppercase"></span>
+    
+                            </address>
+    
+    
+                            <address>
+    
+                                <strong>
+                                    Speciality:
+                                </strong>
+    
+                                <span id="speciality"
+                                    class="text-uppercase"></span>
+    
+                            </address>
+    
+                        </div>
+    
+    
                         <div class="col-6 text-end">
+    
                             <address>
-                                <strong>Date:</strong> <span id="date"></span>
+    
+                                <strong>
+                                    Date:
+                                </strong>
+    
+                                <span id="date"></span>
+    
                             </address>
+    
+    
                             <address>
-                                <strong>Consultation Fee:</strong> <span id="fee"></span>
+    
+                                <strong>
+                                    Consultation Fee:
+                                </strong>
+    
+                                <span id="fee"></span>
+    
                             </address>
+    
                         </div>
+    
                     </div>
+    
                 </div>
-
-                <h5 class = "mt-5"><u>Clinic Copy</u></h5>
-                <div class="border border-dark row py-2">
-                    <div class="row">
-                        <h6 class="d-inline-block w-25">MR No.&nbsp; <span id="mrNo1"></span></h6>
-                        <h6 class="d-inline-block w-50">Patient Name: &nbsp; <span id="name1"
-                                class="text-uppercase"></span></h6>
-                        <h6 class="d-inline-block text-end w-25">Age: &nbsp;<span id="age1"></span></h6>
+    
+    
+                <!-- ========================= -->
+                <!-- CLINIC COPY -->
+                <!-- ========================= -->
+    
+                <h5 class="mt-5">
+                    <u>Clinic Copy</u>
+                </h5>
+    
+    
+                <div class="border border-dark py-2 px-2">
+    
+                    <!-- Patient information -->
+                    <div class="row align-items-center">
+    
+                        <div class="col-2">
+    
+                            <h6 class="mb-0">
+                                MR No.&nbsp;
+                                <span id="mrNo1"></span>
+                            </h6>
+    
+                        </div>
+    
+    
+                        <div class="col-5">
+    
+                            <h6 class="mb-0">
+                                Patient Name:&nbsp;
+                                <span id="name1"
+                                    class="text-uppercase"></span>
+                            </h6>
+    
+                        </div>
+    
+    
+                        <div class="col-5">
+    
+                            <h6 class="mb-0 text-end text-nowrap">
+                                Date of Birth:&nbsp;
+                                <span id="dob1"></span>
+                            </h6>
+    
+                        </div>
+    
                     </div>
+    
+    
                     <hr>
-                    <div class="row">
-                        <address class="d-inline-block w-50 pe-2"><strong>Address: &nbsp; </strong><span id="address1"
-                                class="d-inline-block"></span></address>
-                        <address class="d-inline-block w-25"><strong>Ph: &nbsp; </strong><span
-                                id="phone1"></span></address>
-                        <address class="d-inline-block text-end w-25"><strong>Gender: &nbsp;</strong><span
-                                id="gender1"></span></address>
-                    </div>
-                    <div class="row mt-5">
+    
+    
+                    <!-- Contact information -->
+                    <div class="row align-items-center">
+    
                         <div class="col-6">
-                            <address>
-                                <strong>Consultant:</strong><span id="consultant1" class="text-uppercase"></span>
+    
+                            <address class="mb-0 pe-2">
+    
+                                <strong>
+                                    Address:&nbsp;
+                                </strong>
+    
+                                <span id="address1"></span>
+    
                             </address>
-                            <address>
-                                <strong>Speciality:</strong> <span id="speciality1" class="text-uppercase"></span>
-                            </address>
+    
                         </div>
-                        <div class="col-6 text-end">
-                            <address>
-                                <strong>Date:</strong> <span id="date1"></span>
+    
+    
+                        <div class="col-3">
+    
+                            <address class="mb-0">
+    
+                                <strong>
+                                    Ph:&nbsp;
+                                </strong>
+    
+                                <span id="phone1"></span>
+    
                             </address>
-                            <address>
-                                <strong>Consultation Fee:</strong> <span id="fee1"></span>
-                            </address>
+    
                         </div>
+    
+    
+                        <div class="col-3">
+    
+                            <address class="mb-0 text-end">
+    
+                                <strong>
+                                    Gender:&nbsp;
+                                </strong>
+    
+                                <span id="gender1"></span>
+    
+                            </address>
+    
+                        </div>
+    
                     </div>
+    
+    
+                    <!-- Consultant information -->
+                    <div class="row mt-5">
+    
+                        <div class="col-6">
+    
+                            <address>
+    
+                                <strong>
+                                    Consultant:
+                                </strong>
+    
+                                <span id="consultant1"
+                                    class="text-uppercase"></span>
+    
+                            </address>
+    
+    
+                            <address>
+    
+                                <strong>
+                                    Speciality:
+                                </strong>
+    
+                                <span id="speciality1"
+                                    class="text-uppercase"></span>
+    
+                            </address>
+    
+                        </div>
+    
+    
+                        <div class="col-6 text-end">
+    
+                            <address>
+    
+                                <strong>
+                                    Date:
+                                </strong>
+    
+                                <span id="date1"></span>
+    
+                            </address>
+    
+    
+                            <address>
+    
+                                <strong>
+                                    Consultation Fee:
+                                </strong>
+    
+                                <span id="fee1"></span>
+    
+                            </address>
+    
+                        </div>
+    
+                    </div>
+    
                 </div>
+    
+    
+                <!-- ========================= -->
+                <!-- RECEIPT FOOTER -->
+                <!-- ========================= -->
+    
+                <div class="receipt-footer">
+    
+                    <div class="date-time">
+                        <strong>Date/Time:</strong>
+                        <span id="receiptDateTime"></span>
+                    </div>
+    
+    
+                    <div class="receptionist">
+                        <span id="receptionist"></span>
+                    </div>
+    
+                </div>
+    
+    
             </div>
+    
         </div>
+    
     </div>
-
+    
+    
     <script src="./js/receipt.js"></script>
-</body>
-
-</html>
+    
+    </body> </html>

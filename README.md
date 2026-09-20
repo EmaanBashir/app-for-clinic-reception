@@ -16,6 +16,7 @@ Coded in *Electron Forge*:
 - npm install
 - Download XAMPP and start apache and mysql (If they dont start automatically)
 - Create db and required tables manually on localhost/phpmyadmin (DB structure given at the end)
+- Add username/password to the db manually. Use password = PASSWORD('actualpassword') in the insert query
 - npm start
 
 ## How to create an electron application
@@ -51,6 +52,7 @@ addBypassChecker((filePath) => { return filePath.indexOf(app.getAppPath()) === -
 - Open XAMPP in admin mode
 - Check the boxes next to apache and mysql (This will start apache and mysql automatically, whenever the system boots.)
 - Create the db and required tables manually at localhost/phpmyadmin (DB structure given at the end)
+- Add username/password to the db manually. Use password = PASSWORD('actualpassword') in the insert query
 - Run the application
 
 ## Database structure

@@ -46,7 +46,7 @@ let loadData = (consultantId, month) => {
                         <tr>
                             <th scope="row">${rows[i].patientId}</th>
                             <td>${rows[i].name}</td>
-                            <td>${rows[i].age ? rows[i].age : '-'}</td>
+                            <td>${rows[i].dob ? rows[i].dob.toLocaleDateString('en-GB') : '-'}</td>
                             <td>${gender}</td>
                             <td>${rows[i].date.toDateString()}</td>
                             <td>${rows[i].phone ? rows[i].phone : '-'}</td>

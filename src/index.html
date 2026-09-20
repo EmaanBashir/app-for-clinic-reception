@@ -5,43 +5,73 @@
   <meta charset="utf-8">
   <title>EyeMed Clinic</title>
   <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <style>
+    .img {
+      background-size: cover;
+      background-position: center center;
+    }
 
-<style>
-  .img {
-  background-size: cover;
-  background-position: center center; }
-  
-</style>
-  
+    /* Clean up the date input controls */
+    input[type="date"] {
+      position: relative;
+    }
+
+    /* Hide the small up/down spinner controls */
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-clear-button {
+      display: none;
+    }
+
+    /* Keep the calendar picker icon visible and clickable */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      opacity: 1;
+    }
+  </style>
 </head>
 
 <body class="img js-fullheight" style="background-image: url(images/bg.jfif);">
-
   <div class="container card mt-5 p-5">
-    <div class = "text-end"><a href="./login.html" class = "btn">SIGN OUT</a></div>
+    <div class="text-end">
+      <a href="./login.html" class="btn">SIGN OUT</a>
+    </div>
+
     <h2 class="text-center">Payment Receipt</h2>
+
     <form class="row g-3 mt-1" id="receipt">
+
       <div class="col-md-6">
-        <label for="patientId" class="form-label">MR No. </label>
+        <label for="patientId" class="form-label">MR No.</label>
         <input type="number" class="form-control" id="patientId" min="1" required disabled>
       </div>
+
       <div class="col-md-6">
         <div class="form-check">
-          <br class = "d-none d-md-block"><br class = "d-none d-md-block">
+          <br class="d-none d-md-block">
+          <br class="d-none d-md-block">
+
           <input class="form-check-input" type="checkbox" id="old">
+
           <label class="form-check-label" for="old">
             Old patient
           </label>
         </div>
       </div>
+
       <div class="col-md-4">
         <label for="patientName" class="form-label">Name</label>
         <input type="text" class="form-control" id="patientName" required>
       </div>
+
       <div class="col-md-4">
-        <label for="patientAge" class="form-label">Age</label>
-        <input type="number" step="0.1" class="form-control" id="patientAge" required>
+        <label for="patientDOB" class="form-label">Date of Birth</label>
+        <input type="date" class="form-control" id="patientDOB" required>
       </div>
+
       <div class="col-md-4">
         <label for="patientGender" class="form-label">Gender</label>
         <select class="form-select" id="patientGender" required>
@@ -49,55 +79,76 @@
           <option value="f">Female</option>
         </select>
       </div>
+
       <div class="col-md-6">
         <label for="patientPhone" class="form-label">Phone</label>
         <input type="number" class="form-control" id="patientPhone">
       </div>
+
       <div class="col-md-6">
         <label for="patientAddress" class="form-label">Address</label>
         <input type="text" class="form-control" id="patientAddress">
       </div>
+
       <div class="col-md-6">
         <label for="consultant" class="form-label">Consultant</label>
+
         <select id="consultant" class="form-select" required>
           <option value="0">Dr. Hamid Bashir</option>
           <option value="1">Dr. Naeem Altaf</option>
         </select>
       </div>
+
       <div class="col-md-6">
         <label for="fee" class="form-label">Consultation fee</label>
         <input type="number" class="form-control" id="fee" required>
       </div>
-      <div class="col-12">
-        <button type="submit" class="btn btn-secondary">Save / Print</button>
+
+      <div class="col-12 d-flex justify-content-between align-items-center mt-3">
+
+        <div>
+          <button type="submit" class="btn btn-secondary">
+            Save / Print
+          </button>
+        </div>
+      
+        <div class="d-flex align-items-center">
+          <label for="receptionist" class="form-label mb-0 me-2">
+            Entered By:
+          </label>
+      
+          <input type="text"
+                 class="form-control"
+                 id="receptionist"
+                 style="width: 220px;"
+                 required>
+        </div>
+      
       </div>
+      
+      
+
     </form>
-    <div class = "text-start mt-1"><a href="./list.html" class = "btn">Patients List</a></div>
+
+    <div class="text-start mt-1">
+      <a href="./list.html" class="btn">Patients List</a>
+    </div>
+
   </div>
-
-  <script>
-
-    let mysql = require('mysql');
-
-    let connection = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: null,
-      database: 'eyemed_db'
-    });
-
-    connection.connect((err) => {
-      if (err) {
-        console.log(err.stack);
-      }
-      console.log("Connection successful");
-    });
-
-  </script> 
-
+  <script> let mysql = require('mysql'); let connection = mysql.createConnection({ host: 'localhost', user: 'root', password: null, database: 'eyemed_db', dateStrings: true }); connection.connect((err) => { if (err) { console.log(err.stack); } console.log("Connection successful"); }); </script>
   <script src="./js/savePrint.js"></script>
   <script src="./js/next.js"></script>
-  <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
+  <script> window.$ = window.jQuery = require('./js/jquery.min.js'); </script>
+  <script>
+    let receptionistField = document.querySelector("#receptionist");
+
+    let receptionistName = sessionStorage.getItem("receptionistName");
+
+    if (receptionistName) {
+      receptionistField.value = receptionistName;
+    }
+  </script>
+
 </body>
 
 </html>

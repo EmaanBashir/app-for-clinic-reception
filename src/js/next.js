@@ -15,7 +15,7 @@ connection.query(query, (err, rows, fields) => {
     idInput.max = id + 1;
 });
 
-let patientAge = document.querySelector("#patientAge");
+let patientDOB = document.querySelector("#patientDOB");
 let patientGender = document.querySelector("#patientGender");
 let patientName = document.querySelector("#patientName");
 let patientAddress = document.querySelector("#patientAddress");
@@ -33,7 +33,7 @@ checkbox.addEventListener('change', () => {
         idInput.setAttribute('disabled', '');
         idInput.value = id + 1;
         if (changed) {
-            patientAge.value = patientAge.defaultValue;
+            patientDOB.value = patientDOB.defaultValue;
             patientGender.value = patientGender.defaultValue;
             patientName.value = patientName.defaultValue;
             patientAddress.value = patientAddress.defaultValue;
@@ -48,7 +48,7 @@ checkbox.addEventListener('change', () => {
 idInput.addEventListener('keyup', () => {
     let num = idInput.value;
     if (changed) {
-        patientAge.value = patientAge.defaultValue;
+        patientDOB.value = patientDOB.defaultValue;
         patientGender.value = patientGender.defaultValue;
         patientName.value = patientName.defaultValue;
         patientAddress.value = patientAddress.defaultValue;
@@ -67,7 +67,7 @@ idInput.addEventListener('keyup', () => {
             }
             if (rows.length > 0) {
                 let patient = rows[0];
-                patientAge.value = patient.age;
+                patientDOB.value = patient.dob || '';
                 patientGender.value = patient.gender;
                 patientName.value = patient.name;
                 patientAddress.value = patient.address;

@@ -1,10 +1,12 @@
-//login function
 document.querySelector("#login").addEventListener('click', (e) => {
     e.preventDefault();
+
     let usernameField = document.querySelector("#username");
     let passwordField = document.querySelector("#password-field");
+
     let username = usernameField.value;
     let password = passwordField.value;
+
     let mysql = require('mysql');
 
     let connection = mysql.createConnection({
@@ -17,7 +19,9 @@ document.querySelector("#login").addEventListener('click', (e) => {
     connection.connect((err) => {
         if (err) {
             console.log(err.stack);
+            return;
         }
+
         console.log("Connection successful");
     });
 
@@ -29,11 +33,16 @@ document.querySelector("#login").addEventListener('click', (e) => {
             console.log(err.stack);
             return;
         }
+
         if (rows.length > 0) {
+
+            // Save the logged-in user's name
+            sessionStorage.setItem("receptionistName", rows[0].name);
+
             window.location.href = "./index.html";
-        }else{
+
+        } else {
             document.querySelector("#error").innerHTML = "Incorrect Credentials";
         }
     });
-
 });

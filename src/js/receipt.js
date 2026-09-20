@@ -97,8 +97,7 @@ connection.query(quer, (err, rows, fields) => {
         document.querySelector("#name1").innerHTML = rows[0].name;
 
         // Tell the main Electron process that the receipt is ready to print
-        const { ipcRenderer } = require('electron');
-        ipcRenderer.send('print-receipt-ready');
+        window.electronAPI.receiptReady();
 
     });
 

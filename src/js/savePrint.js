@@ -63,8 +63,7 @@ function saveData() {
 
 // Print the receipt
 function printData() {
-    const { ipcRenderer } = require('electron');
-    ipcRenderer.send('print-receipt');
+    window.electronAPI.printReceipt();
 }
 
 

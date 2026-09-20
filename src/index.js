@@ -5,17 +5,18 @@ if (require('electron-squirrel-startup')) {
 }
 
 let mainWindow;
-
 let receiptWindow;
 
 ipcMain.on('print-receipt', () => {
+  console.log('1. Received print-receipt');
 
   receiptWindow = new BrowserWindow({
     show: true,
     webPreferences: {
+      preload: `${__dirname}/preload.js`,
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: true
+      devTools: false
     }
   });
 
@@ -24,18 +25,19 @@ ipcMain.on('print-receipt', () => {
   receiptWindow.webContents.openDevTools();
 
   receiptWindow.webContents.on('did-finish-load', () => {
+    console.log('2. Receipt page finished loading');
   });
 });
 
 ipcMain.on('print-receipt-ready', () => {
-
+  console.log('3. Received print-receipt-ready');
 
   if (!receiptWindow) {
-
+    console.log('4. No receipt window exists');
     return;
   }
 
-
+  console.log('5. Starting print');
 
   receiptWindow.webContents.print(
     {
@@ -51,7 +53,7 @@ ipcMain.on('print-receipt-ready', () => {
       copies: 1
     },
     (success, failureReason) => {
-
+      console.log('6. Print result:', success, failureReason);
 
       if (!success) {
         console.log(`Print failed: ${failureReason}`);
@@ -72,9 +74,10 @@ const createWindow = () => {
     height: 850,
     show: false,
     webPreferences: {
+      preload: `${__dirname}/preload.js`,
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: false,
+      devTools: false
     }
   });
 
@@ -91,9 +94,13 @@ const createWindow = () => {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
 app.on('activate', () => {
-  if (mainWindow === null) createWindow();
+  if (mainWindow === null) {
+    createWindow();
+  }
 });

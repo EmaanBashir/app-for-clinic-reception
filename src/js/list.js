@@ -36,7 +36,13 @@ let loadData = async (consultantId, month) => {
                         <td>${result.rows[i].name}</td>
                         <td>${result.rows[i].dob ? new Date(result.rows[i].dob).toLocaleDateString('en-GB') : '-'}</td>
                         <td>${gender}</td>
-                        <td>${new Date(result.rows[i].date).toDateString()}</td>
+                        <td>${new Date(result.rows[i].date).toLocaleString('en-GB', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })}</td>
                         <td>${result.rows[i].phone ? result.rows[i].phone : '-'}</td>
                         <td>${result.rows[i].address ? result.rows[i].address : '-'}</td>
                         <td>${result.rows[i].fee}</td>

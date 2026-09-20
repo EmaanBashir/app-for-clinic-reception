@@ -153,7 +153,7 @@ ipcMain.handle('get-latest-receipt', () => {
   });
 });
 
-ipcMain.handle('get-consultations', (event, { consultantId, month }) => {
+ipcMain.handle('get-consultations', (event, consultantId, month) => {
   return new Promise((resolve) => {
     const connection = mysql.createConnection({
       host: 'localhost',
@@ -162,47 +162,35 @@ ipcMain.handle('get-consultations', (event, { consultantId, month }) => {
       database: 'eyemed_db'
     });
 
-    connection.connect((err) => {
+    const query = `
+      SELECT Consultations.patientId,
+             Patients.name,
+             Patients.dob,
+             Patients.gender,
+             Consultations.date,
+             Patients.phone,
+             Patients.address,
+             Consultations.fee
+      FROM Consultations
+      INNER JOIN Patients ON Consultations.patientId = Patients.id
+      WHERE Consultations.consultantId = "${consultantId}"
+      AND DATE_FORMAT(Consultations.date, '%Y-%m') = "${month}"
+      ORDER BY Consultations.date;
+    `;
+
+    connection.query(query, (err, rows) => {
+      connection.end();
+
       if (err) {
+        console.log("An error occurred performing the query.");
         console.log(err.stack);
-        resolve({
-          success: false,
-          error: 'Database connection failed'
-        });
+        resolve({ success: false, error: 'Database query failed' });
         return;
       }
 
-      const selectedDate = new Date(month);
-      const selectedMonth = selectedDate.getMonth() + 1;
-      const selectedYear = selectedDate.getFullYear();
-
-      const query = `
-        SELECT * FROM Consultations
-        INNER JOIN Patients ON patientId = id
-        WHERE consultantId = "${consultantId}"
-        AND YEAR(Consultations.date) = "${selectedYear}"
-        AND MONTH(Consultations.date) = "${selectedMonth}"
-        ORDER BY consultationId DESC;
-      `;
-
-      connection.query(query, (err, rows) => {
-        connection.end();
-
-        if (err) {
-          console.log('An error occurred performing the query.');
-          console.log(err.stack);
-
-          resolve({
-            success: false,
-            error: 'Consultation query failed'
-          });
-          return;
-        }
-
-        resolve({
-          success: true,
-          rows
-        });
+      resolve({
+        success: true,
+        rows
       });
     });
   });
@@ -269,6 +257,135 @@ ipcMain.on('print-receipt-ready', () => {
   );
 });
 
+ipcMain.handle('get-next-patient-id', () => {
+  return new Promise((resolve) => {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null,
+      database: 'eyemed_db'
+    });
+
+    connection.query(
+      'SELECT max(id) as id FROM Patients',
+      (err, rows) => {
+        connection.end();
+
+        if (err) {
+          console.log(err.stack);
+          resolve({ success: false, error: 'Database query failed' });
+          return;
+        }
+
+        resolve({
+          success: true,
+          id: rows[0].id
+        });
+      }
+    );
+  });
+});
+
+ipcMain.handle('get-patient-by-id', (event, patientId) => {
+  return new Promise((resolve) => {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null,
+      database: 'eyemed_db'
+    });
+
+    connection.query(
+      `SELECT * FROM Patients WHERE id = '${patientId}'`,
+      (err, rows) => {
+        connection.end();
+
+        if (err) {
+          console.log(err.stack);
+          resolve({ success: false, error: 'Database query failed' });
+          return;
+        }
+
+        resolve({
+          success: true,
+          patient: rows.length > 0 ? rows[0] : null
+        });
+      }
+    );
+  });
+});
+
+ipcMain.handle('save-consultation', (event, data) => {
+  return new Promise((resolve) => {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null,
+      database: 'eyemed_db'
+    });
+
+    const {
+      patientId,
+      name,
+      dob,
+      gender,
+      address,
+      phone,
+      fee,
+      consultantId,
+      receptionist
+    } = data;
+
+    const patientQuery = `SELECT * FROM Patients WHERE id = "${patientId}";`;
+
+    connection.query(patientQuery, (err, rows) => {
+      if (err) {
+        console.log("An error occurred performing the query.");
+        console.log(err.stack);
+        connection.end();
+        resolve({ success: false, error: 'Patient lookup failed' });
+        return;
+      }
+
+      let query;
+
+      if (rows.length > 0) {
+        query = `UPDATE Patients SET name = "${name}", dob = "${dob}", gender = "${gender}", address = "${address}", phone = "${phone}" WHERE id = "${patientId}";`;
+      } else {
+        query = `INSERT INTO Patients (id, name, dob, gender, address, phone) VALUES ("${patientId}", "${name}", "${dob}", "${gender}", "${address}", "${phone}");`;
+      }
+
+      connection.query(query, (err) => {
+        if (err) {
+          console.log("An error occurred performing the query.");
+          console.log(err.stack);
+          connection.end();
+          resolve({ success: false, error: 'Patient save failed' });
+          return;
+        }
+
+        query = `INSERT INTO Consultations
+          (patientId, consultantId, fee, receptionist)
+          VALUES
+          ("${patientId}", "${consultantId}", "${fee}", "${receptionist}");`;
+
+        connection.query(query, (err) => {
+          connection.end();
+
+          if (err) {
+            console.log("An error occurred performing the query.");
+            console.log(err.stack);
+            resolve({ success: false, error: 'Consultation save failed' });
+            return;
+          }
+
+          resolve({ success: true });
+        });
+      });
+    });
+  });
+});
+
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 1300,
@@ -278,7 +395,7 @@ const createWindow = () => {
       preload: `${__dirname}/preload.js`,
       nodeIntegration: true,
       contextIsolation: false,
-      devTools: false
+      devTools: true
     }
   });
 

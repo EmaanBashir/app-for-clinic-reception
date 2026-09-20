@@ -7,6 +7,63 @@ if (require('electron-squirrel-startup')) {
 let mainWindow;
 let receiptWindow;
 
+const mysql = require('mysql');
+
+ipcMain.handle('login', (event, { username, password }) => {
+  return new Promise((resolve) => {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null,
+      database: 'eyemed_db'
+    });
+
+    connection.connect((err) => {
+      if (err) {
+        console.log(err.stack);
+        resolve({
+          success: false,
+          error: 'Database connection failed'
+        });
+        return;
+      }
+
+      const query = `
+        SELECT * FROM Users
+        WHERE username = "${username}"
+        AND password = PASSWORD("${password}")
+      `;
+
+      connection.query(query, (err, rows) => {
+        connection.end();
+
+        if (err) {
+          console.log('An error occurred performing the query.');
+          console.log(err.stack);
+
+          resolve({
+            success: false,
+            error: 'Database query failed'
+          });
+          return;
+        }
+
+        if (rows.length > 0) {
+          resolve({
+            success: true,
+            name: rows[0].name
+          });
+        } else {
+          resolve({
+            success: false,
+            error: 'Incorrect Credentials'
+          });
+        }
+      });
+    });
+  });
+});
+
 ipcMain.on('print-receipt', () => {
   console.log('1. Received print-receipt');
 

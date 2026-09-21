@@ -48,32 +48,32 @@ function initializeDatabase() {
                       }
 
                       const createPatientsTable = `
-                          CREATE TABLE IF NOT EXISTS Patients (
-                              id int(7) NOT NULL AUTO_INCREMENT,
-                              name varchar(30) NOT NULL,
-                              dob date DEFAULT NULL,
-                              gender char(1) DEFAULT NULL,
-                              phone bigint(20) DEFAULT NULL,
-                              address varchar(50) DEFAULT NULL,
-                              PRIMARY KEY (id)
-                          ) ENGINE=InnoDB
-                          DEFAULT CHARSET=utf8mb4
-                          COLLATE=utf8mb4_general_ci
-                      `;
+                      CREATE TABLE IF NOT EXISTS Patients (
+                          id varchar(12) NOT NULL,
+                          name varchar(30) NOT NULL,
+                          dob date DEFAULT NULL,
+                          gender char(1) DEFAULT NULL,
+                          phone bigint(20) DEFAULT NULL,
+                          address varchar(80) DEFAULT NULL,
+                          PRIMARY KEY (id)
+                      ) ENGINE=InnoDB
+                      DEFAULT CHARSET=utf8mb4
+                      COLLATE=utf8mb4_general_ci
+                  `;
 
-                      const createConsultationsTable = `
-                          CREATE TABLE IF NOT EXISTS Consultations (
-                              consultationId int(11) NOT NULL AUTO_INCREMENT,
-                              patientId int(11) NOT NULL,
-                              consultantId int(11) NOT NULL,
-                              fee int(20) NOT NULL,
-                              date datetime NOT NULL DEFAULT current_timestamp(),
-                              receptionist varchar(30) DEFAULT NULL,
-                              PRIMARY KEY (consultationId)
-                          ) ENGINE=InnoDB
-                          DEFAULT CHARSET=utf8mb4
-                          COLLATE=utf8mb4_general_ci
-                      `;
+                  const createConsultationsTable = `
+                  CREATE TABLE IF NOT EXISTS Consultations (
+                      consultationId int(11) NOT NULL AUTO_INCREMENT,
+                      patientId varchar(12) NOT NULL,
+                      consultantId int(11) NOT NULL,
+                      fee int(20) NOT NULL,
+                      date datetime NOT NULL DEFAULT current_timestamp(),
+                      receptionist varchar(30) DEFAULT NULL,
+                      PRIMARY KEY (consultationId)
+                  ) ENGINE=InnoDB
+                  DEFAULT CHARSET=utf8mb4
+                  COLLATE=utf8mb4_general_ci
+              `;
 
                       const createUsersTable = `
                           CREATE TABLE IF NOT EXISTS Users (
@@ -409,23 +409,50 @@ ipcMain.handle('get-next-patient-id', () => {
       database: 'eyemed_db'
     });
 
-    connection.query(
-      'SELECT max(id) as id FROM Patients',
-      (err, rows) => {
-        connection.end();
+    const now = new Date();
 
-        if (err) {
-          console.log(err.stack);
-          resolve({ success: false, error: 'Database query failed' });
-          return;
-        }
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
 
+    const prefix = `${year}/${month}/`;
+
+    const query = `
+      SELECT MAX(CAST(SUBSTRING(id, 9, 4) AS UNSIGNED)) AS sequence
+      FROM Patients
+      WHERE id LIKE '${prefix}%'
+    `;
+
+    connection.query(query, (err, rows) => {
+      connection.end();
+
+      if (err) {
+        console.log(err.stack);
         resolve({
-          success: true,
-          id: rows[0].id
+          success: false,
+          error: 'Database query failed'
         });
+        return;
       }
-    );
+
+      const currentSequence = rows[0].sequence || 0;
+      const nextSequence = currentSequence + 1;
+
+      if (nextSequence > 9999) {
+        resolve({
+          success: false,
+          error: 'Monthly patient ID limit reached'
+        });
+        return;
+      }
+
+      const patientId =
+        `${prefix}${String(nextSequence).padStart(4, '0')}`;
+
+      resolve({
+        success: true,
+        id: patientId
+      });
+    });
   });
 });
 

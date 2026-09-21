@@ -46,10 +46,13 @@ let loadData = async (consultantId, month) => {
 
         document.querySelector('#tbody1').innerHTML += `
                     <tr>
-                        <th scope="row">${result.rows[i].patientId}</th>
+                        <th scope="row">${i + 1}</th>
+                        <td>${result.rows[i].patientId}</td>
                         <td>${result.rows[i].name}</td>
                         <td>${result.rows[i].dob ? new Date(result.rows[i].dob).toLocaleDateString('en-GB') : '-'}</td>
                         <td>${gender}</td>
+                        <td>${result.rows[i].phone ? result.rows[i].phone : '-'}</td>
+                        <td>${result.rows[i].address ? result.rows[i].address : '-'}</td>
                         <td>${new Date(result.rows[i].date).toLocaleString('en-GB', {
                             day: '2-digit',
                             month: '2-digit',
@@ -58,8 +61,6 @@ let loadData = async (consultantId, month) => {
                             minute: '2-digit',
                             hour12: false
                         }).replace(',', '')}</td>
-                        <td>${result.rows[i].phone ? result.rows[i].phone : '-'}</td>
-                        <td>${result.rows[i].address ? result.rows[i].address : '-'}</td>
                         <td>${result.rows[i].fee}</td>
                     </tr>`;
     }

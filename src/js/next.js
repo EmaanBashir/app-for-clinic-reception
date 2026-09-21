@@ -1,6 +1,7 @@
-// Get the max patient id to suggest next patient id
+// Get the next MR number
 let idInput = document.querySelector("#patientId");
-let id;
+let nextPatientId = null;
+let validOldPatient = false;
 
 window.electronAPI.getNextPatientId().then((result) => {
     if (!result.success) {
@@ -8,9 +9,8 @@ window.electronAPI.getNextPatientId().then((result) => {
         return;
     }
 
-    id = result.id;
-    idInput.value = id + 1;
-    idInput.max = id + 1;
+    nextPatientId = result.id;
+    idInput.value = nextPatientId;
 });
 
 // Get the next receipt number
@@ -35,15 +35,21 @@ let changed = false;
 
 // Old patient checkbox
 let checkbox = document.querySelector("#old");
+
 checkbox.addEventListener('change', () => {
     let old = checkbox.checked;
 
     if (old) {
         idInput.removeAttribute('disabled');
-        idInput.value = idInput.defaultValue;
+        idInput.value = '';
+        validOldPatient = false;
+        idInput.setCustomValidity('Please enter a valid existing MR number.');
+        idInput.focus();
     } else {
         idInput.setAttribute('disabled', '');
-        idInput.value = id + 1;
+        idInput.value = nextPatientId;
+        validOldPatient = false;
+        idInput.setCustomValidity('');
 
         if (changed) {
             patientDOB.value = patientDOB.defaultValue;
@@ -56,9 +62,12 @@ checkbox.addEventListener('change', () => {
     }
 });
 
-// Auto fill patient info, when id is typed
+// Auto fill patient info when an existing MR number is entered
 idInput.addEventListener('keyup', () => {
-    let num = idInput.value;
+    let patientId = idInput.value.trim();
+
+    validOldPatient = false;
+    idInput.setCustomValidity('Please enter a valid existing MR number.');
 
     if (changed) {
         patientDOB.value = patientDOB.defaultValue;
@@ -69,25 +78,39 @@ idInput.addEventListener('keyup', () => {
         changed = false;
     }
 
-    if (num <= id) {
-        window.electronAPI.getPatientById(num).then((result) => {
-            if (!result.success) {
-                console.log(result.error);
-                return;
-            }
-
-            if (result.patient) {
-                let patient = result.patient;
-
-                patientDOB.value = patient.dob
-                    ? new Date(patient.dob).toISOString().split('T')[0]
-                    : '';
-                patientGender.value = patient.gender;
-                patientName.value = patient.name;
-                patientAddress.value = patient.address;
-                patientPhone.value = patient.phone;
-                changed = true;
-            }
-        });
+    if (!checkbox.checked || !patientId) {
+        return;
     }
+
+    // Check that the MR number has the correct format:
+    // YYYY/MM/0000
+    const mrPattern = /^\d{4}\/\d{2}\/\d{4}$/;
+
+    if (!mrPattern.test(patientId)) {
+        return;
+    }
+
+    window.electronAPI.getPatientById(patientId).then((result) => {
+        if (!result.success) {
+            console.log(result.error);
+            return;
+        }
+
+        if (result.patient) {
+            let patient = result.patient;
+
+            patientDOB.value = patient.dob
+                ? new Date(patient.dob).toISOString().split('T')[0]
+                : '';
+
+            patientGender.value = patient.gender;
+            patientName.value = patient.name;
+            patientAddress.value = patient.address;
+            patientPhone.value = patient.phone;
+
+            validOldPatient = true;
+            idInput.setCustomValidity('');
+            changed = true;
+        }
+    });
 });

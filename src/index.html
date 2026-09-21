@@ -91,12 +91,11 @@
         <div class="col-md-6">
           <label for="patientId" class="form-label">MR No.</label>
           <input
-            type="number"
-            class="form-control"
-            id="patientId"
-            min="1"
-            required
-            disabled>
+          type="text"
+          class="form-control"
+          id="patientId"
+          required
+          disabled>
         </div>
 
         <div class="col-md-6 d-flex align-items-end">
@@ -118,6 +117,7 @@
             type="text"
             class="form-control"
             id="patientName"
+            maxlength="30"
             required>
         </div>
 
@@ -154,7 +154,8 @@
           <input
             type="text"
             class="form-control"
-            id="patientAddress">
+            id="patientAddress"
+            maxlength="80">
         </div>
 
       </div>

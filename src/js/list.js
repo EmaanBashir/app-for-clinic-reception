@@ -9,6 +9,20 @@ let loadData = async (consultantId, month) => {
         month
     );
 
+    let consultantName = consultantId == 0
+        ? "Dr. Hamid Bashir"
+        : "Dr. Naeem Altaf";
+
+    let selectedDate = new Date(month + "-01");
+
+    let monthName = selectedDate.toLocaleDateString('en-GB', {
+        month: 'long',
+        year: 'numeric'
+    });
+
+    document.querySelector("#currentMonth").innerHTML =
+        consultantName + " &nbsp; | &nbsp; " + monthName;
+
     if (!result.success) {
         console.log(result.error);
         return;
@@ -41,8 +55,9 @@ let loadData = async (consultantId, month) => {
                             month: '2-digit',
                             year: 'numeric',
                             hour: '2-digit',
-                            minute: '2-digit'
-                        })}</td>
+                            minute: '2-digit',
+                            hour12: false
+                        }).replace(',', '')}</td>
                         <td>${result.rows[i].phone ? result.rows[i].phone : '-'}</td>
                         <td>${result.rows[i].address ? result.rows[i].address : '-'}</td>
                         <td>${result.rows[i].fee}</td>

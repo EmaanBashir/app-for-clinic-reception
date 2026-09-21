@@ -1,4 +1,148 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+const mysql = require('mysql');
+
+function initializeDatabase() {
+  return new Promise((resolve, reject) => {
+      // First connect to MySQL without selecting a database.
+      const connection = mysql.createConnection({
+          host: 'localhost',
+          user: 'root',
+          password: null
+      });
+
+      connection.connect((err) => {
+          if (err) {
+              console.log('Unable to connect to MySQL:', err);
+              reject(err);
+              return;
+          }
+
+          // Create the application database if it does not already exist.
+          connection.query(
+              `CREATE DATABASE IF NOT EXISTS eyemed_db
+               DEFAULT CHARACTER SET utf8mb4
+               COLLATE utf8mb4_general_ci`,
+              (err) => {
+                  if (err) {
+                      console.log('Unable to create database:', err);
+                      connection.end();
+                      reject(err);
+                      return;
+                  }
+
+                  connection.end();
+
+                  // Now connect to the newly created/existing database.
+                  const db = mysql.createConnection({
+                      host: 'localhost',
+                      user: 'root',
+                      password: null,
+                      database: 'eyemed_db'
+                  });
+
+                  db.connect((err) => {
+                      if (err) {
+                          console.log('Unable to connect to eyemed_db:', err);
+                          reject(err);
+                          return;
+                      }
+
+                      const createPatientsTable = `
+                          CREATE TABLE IF NOT EXISTS Patients (
+                              id int(7) NOT NULL AUTO_INCREMENT,
+                              name varchar(30) NOT NULL,
+                              dob date DEFAULT NULL,
+                              gender char(1) DEFAULT NULL,
+                              phone bigint(20) DEFAULT NULL,
+                              address varchar(50) DEFAULT NULL,
+                              PRIMARY KEY (id)
+                          ) ENGINE=InnoDB
+                          DEFAULT CHARSET=utf8mb4
+                          COLLATE=utf8mb4_general_ci
+                      `;
+
+                      const createConsultationsTable = `
+                          CREATE TABLE IF NOT EXISTS Consultations (
+                              consultationId int(11) NOT NULL AUTO_INCREMENT,
+                              patientId int(11) NOT NULL,
+                              consultantId int(11) NOT NULL,
+                              fee int(20) NOT NULL,
+                              date datetime NOT NULL DEFAULT current_timestamp(),
+                              receptionist varchar(30) DEFAULT NULL,
+                              PRIMARY KEY (consultationId)
+                          ) ENGINE=InnoDB
+                          DEFAULT CHARSET=utf8mb4
+                          COLLATE=utf8mb4_general_ci
+                      `;
+
+                      const createUsersTable = `
+                          CREATE TABLE IF NOT EXISTS Users (
+                              username varchar(20) NOT NULL,
+                              password varchar(45) NOT NULL,
+                              name varchar(30) NOT NULL,
+                              PRIMARY KEY (username)
+                          ) ENGINE=InnoDB
+                          DEFAULT CHARSET=utf8mb4
+                          COLLATE=utf8mb4_general_ci
+                      `;
+
+                      db.query(createPatientsTable, (err) => {
+                          if (err) {
+                              console.log('Unable to create patients table:', err);
+                              db.end();
+                              reject(err);
+                              return;
+                          }
+
+                          db.query(createConsultationsTable, (err) => {
+                              if (err) {
+                                  console.log('Unable to create consultations table:', err);
+                                  db.end();
+                                  reject(err);
+                                  return;
+                              }
+
+                              db.query(createUsersTable, (err) => {
+                                  if (err) {
+                                      console.log('Unable to create users table:', err);
+                                      db.end();
+                                      reject(err);
+                                      return;
+                                  }
+
+                                  // Create the first user only if the users
+                                  // table is currently empty.
+                                  const firstUser = `
+                                      INSERT INTO Users (username, password, name)
+                                      SELECT 'eyemed',
+                                             '*B1F54CD885D1BFCEA968F2F22E2BE96051D7C4A4',
+                                             'Wajid'
+                                      WHERE NOT EXISTS (
+                                          SELECT 1 FROM users
+                                      )
+                                  `;
+
+                                  db.query(firstUser, (err) => {
+                                      db.end();
+
+                                      if (err) {
+                                          console.log('Unable to create first user:', err);
+                                          reject(err);
+                                          return;
+                                      }
+
+                                      console.log('Database initialization complete.');
+                                      resolve();
+                                  });
+                              });
+                          });
+                      });
+                  });
+              }
+          );
+      });
+  });
+}
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -7,7 +151,7 @@ if (require('electron-squirrel-startup')) {
 let mainWindow;
 let receiptWindow;
 
-const mysql = require('mysql');
+
 
 ipcMain.handle('login', (event, { username, password }) => {
   return new Promise((resolve) => {
@@ -407,7 +551,14 @@ const createWindow = () => {
   });
 };
 
-app.on('ready', createWindow);
+app.on('ready', async () => {
+  try {
+    await initializeDatabase();
+    createWindow();
+  } catch (err) {
+    console.log('Database initialization failed:', err);
+  }
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

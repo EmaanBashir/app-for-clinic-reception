@@ -48,6 +48,12 @@
       margin-left: auto;
       margin-right: auto;
     }
+
+    /* Receipt number */
+    .receipt-number {
+      float: right;
+      font-weight: 600;
+    }
   </style>
 </head>
 
@@ -73,7 +79,11 @@
 
       <!-- Patient details -->
       <div class="form-section-title">
-        Patient Information
+        <span>Patient Information</span>
+
+        <span class="receipt-number">
+          Receipt No: <span id="receiptNo">-</span>
+        </span>
       </div>
 
       <div class="row g-3">

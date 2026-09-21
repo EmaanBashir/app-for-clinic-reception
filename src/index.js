@@ -228,7 +228,7 @@ ipcMain.handle('get-latest-receipt', () => {
       }
 
       const consultationQuery = `
-        SELECT patientId, consultantId, fee, date, receptionist
+        SELECT consultationId, patientId, consultantId, fee, date, receptionist
         FROM Consultations
         ORDER BY consultationId DESC
         LIMIT 1;
@@ -417,6 +417,38 @@ ipcMain.handle('get-next-patient-id', () => {
         if (err) {
           console.log(err.stack);
           resolve({ success: false, error: 'Database query failed' });
+          return;
+        }
+
+        resolve({
+          success: true,
+          id: rows[0].id
+        });
+      }
+    );
+  });
+});
+
+ipcMain.handle('get-next-receipt-id', () => {
+  return new Promise((resolve) => {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null,
+      database: 'eyemed_db'
+    });
+
+    connection.query(
+      'SELECT max(consultationId) as id FROM Consultations',
+      (err, rows) => {
+        connection.end();
+
+        if (err) {
+          console.log(err.stack);
+          resolve({
+            success: false,
+            error: 'Database query failed'
+          });
           return;
         }
 

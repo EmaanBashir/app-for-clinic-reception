@@ -13,6 +13,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
     getNextPatientId: () => ipcRenderer.invoke('get-next-patient-id'),
 
+    getNextReceiptId: () => ipcRenderer.invoke('get-next-receipt-id'),
+
     getPatientById: (patientId) => ipcRenderer.invoke('get-patient-by-id', patientId),
 
     saveConsultation: (data) => ipcRenderer.invoke('save-consultation', data),

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -101,10 +102,20 @@
         }
 
         .copy-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 13px;
             font-weight: bold;
-            text-decoration: underline;
             margin: 0 0 7px 0;
+        }
+
+        .copy-title-text {
+            text-decoration: underline;
+        }
+
+        .receipt-number {
+            font-size: 12px;
         }
 
         /* =========================
@@ -141,11 +152,12 @@
         }
 
         .address {
-            width: 55%;
+            width: 70%;
         }
 
         .phone {
-            width: 22%;
+            width: 30%;
+            text-align: right;
         }
 
         .gender {
@@ -192,7 +204,7 @@
            ========================= */
 
         .entered-by {
-            text-align: right;
+            text-align: center;
             margin-top: 8px;
             line-height: 1.3;
         }
@@ -219,233 +231,244 @@
             }
         }
     </style>
+
 </head>
 
 <body>
 
-    <div class="receipt">
+<div class="receipt">
 
-        <!-- ========================= -->
-        <!-- CLINIC HEADER -->
-        <!-- ========================= -->
+    <!-- ========================= -->
+    <!-- CLINIC HEADER -->
+    <!-- ========================= -->
 
-        <div class="receipt-header">
+    <div class="receipt-header">
 
-            <div class="clinic-header">
+        <div class="clinic-header">
 
-                <h4>EYE MED CLINIC</h4>
+            <h4>EYE MED CLINIC</h4>
 
-                <div>
-                    IMRAN KHAN AVENUE, CHAKLALA SCHEME 3, RAWALPINDI
-                </div>
-
-                <div>
-                    Tel No. 0331-1393633 &nbsp; | &nbsp; PHC No. R-40233
-                </div>
-
+            <div>
+                IMRAN KHAN AVENUE, CHAKLALA SCHEME 3, RAWALPINDI
             </div>
 
-            <img src="./images/logo.png"
-                alt="Eye Med Clinic Logo"
-                class="clinic-logo">
-
-        </div>
-
-
-        <!-- ========================= -->
-        <!-- RECEIPT TITLE -->
-        <!-- ========================= -->
-
-        <div class="receipt-title">
-            PAYMENT RECEIPT
-        </div>
-
-        <hr class="main-divider">
-
-
-        <!-- ========================= -->
-        <!-- PATIENT COPY -->
-        <!-- ========================= -->
-
-        <div class="copy">
-
-            <div class="copy-title">
-                PATIENT COPY
-            </div>
-
-            <div class="copy-row">
-
-                <div class="field mr">
-                    <strong>MR No:</strong>
-                    <span id="mrNo"></span>
-                </div>
-
-                <div class="field name">
-                    <strong>Patient:</strong>
-                    <span id="name" class="text-uppercase"></span>
-                </div>
-
-                <div class="field dob">
-                    <strong>DOB:</strong>
-                    <span id="dob"></span>
-                </div>
-
-            </div>
-
-            <hr>
-
-            <div class="copy-row">
-
-                <div class="field address">
-                    <strong>Address:</strong>
-                    <span id="address"></span>
-                </div>
-
-                <div class="field phone">
-                    <strong>Ph:</strong>
-                    <span id="phone"></span>
-                </div>
-
-                <div class="field gender">
-                    <strong>Gender:</strong>
-                    <span id="gender"></span>
-                </div>
-
-            </div>
-
-            <div class="details">
-
-                <div class="details-left">
-
-                    <div class="detail-line">
-                        <strong>Consultant:</strong>
-                        <span id="consultant" class="text-uppercase"></span>
-                    </div>
-
-                    <div class="detail-line">
-                        <strong>Speciality:</strong>
-                        <span id="speciality" class="text-uppercase"></span>
-                    </div>
-
-                </div>
-
-                <div class="details-right">
-
-                    <div class="detail-line">
-                        <strong>Date/Time:</strong>
-                        <span id="date"></span>
-                    </div>
-
-                    <div class="detail-line">
-                        <strong>Consultation Charges:</strong>
-                        <span id="fee"></span>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="entered-by">
-                <strong>Entered By:</strong>
-                <span id="receptionist"></span>
+            <div>
+                Tel No. 0331-1393633 &nbsp; | &nbsp; PHC No. R-40233
             </div>
 
         </div>
 
+        <img src="./images/logo.png"
+            alt="Eye Med Clinic Logo"
+            class="clinic-logo">
 
-        <!-- ========================= -->
-        <!-- CLINIC COPY -->
-        <!-- ========================= -->
+    </div>
 
-        <div class="copy">
 
-            <div class="copy-title">
-                CLINIC COPY
+    <!-- ========================= -->
+    <!-- RECEIPT TITLE -->
+    <!-- ========================= -->
+
+    <div class="receipt-title">
+        PAYMENT RECEIPT
+    </div>
+
+    <hr class="main-divider">
+
+
+    <!-- ========================= -->
+    <!-- PATIENT COPY -->
+    <!-- ========================= -->
+
+    <div class="copy">
+
+        <div class="copy-title">
+            <span class="copy-title-text">PATIENT COPY</span>
+
+            <span class="receipt-number">
+                <strong>Receipt No:</strong>
+                <span id="receiptNo"></span>
+            </span>
+        </div>
+
+        <div class="copy-row">
+
+            <div class="field mr">
+                <strong>MR No:</strong>
+                <span id="mrNo"></span>
             </div>
 
-            <div class="copy-row">
+            <div class="field name">
+                <strong>Patient:</strong>
+                <span id="name" class="text-uppercase"></span>
+            </div>
 
-                <div class="field mr">
-                    <strong>MR No:</strong>
-                    <span id="mrNo1"></span>
+            <div class="field dob">
+                <strong>DOB:</strong>
+                <span id="dob"></span>
+            </div>
+
+            <div class="field gender">
+                <strong>Gender:</strong>
+                <span id="gender"></span>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="copy-row">
+
+            <div class="field address">
+                <strong>Address:</strong>
+                <span id="address"></span>
+            </div>
+
+            <div class="field phone">
+                <strong>Ph:</strong>
+                <span id="phone"></span>
+            </div>
+
+        </div>
+
+        <div class="details">
+
+            <div class="details-left">
+
+                <div class="detail-line">
+                    <strong>Consultant:</strong>
+                    <span id="consultant" class="text-uppercase"></span>
                 </div>
 
-                <div class="field name">
-                    <strong>Patient:</strong>
-                    <span id="name1" class="text-uppercase"></span>
-                </div>
-
-                <div class="field dob">
-                    <strong>DOB:</strong>
-                    <span id="dob1"></span>
+                <div class="detail-line">
+                    <strong>Speciality:</strong>
+                    <span id="speciality" class="text-uppercase"></span>
                 </div>
 
             </div>
 
-            <hr>
+            <div class="details-right">
 
-            <div class="copy-row">
-
-                <div class="field address">
-                    <strong>Address:</strong>
-                    <span id="address1"></span>
+                <div class="detail-line">
+                    <strong>Date/Time:</strong>
+                    <span id="date"></span>
                 </div>
 
-                <div class="field phone">
-                    <strong>Ph:</strong>
-                    <span id="phone1"></span>
-                </div>
-
-                <div class="field gender">
-                    <strong>Gender:</strong>
-                    <span id="gender1"></span>
+                <div class="detail-line">
+                    <strong>Consultation Charges:</strong>
+                    <span id="fee"></span>
                 </div>
 
             </div>
 
-            <div class="details">
+        </div>
 
-                <div class="details-left">
-
-                    <div class="detail-line">
-                        <strong>Consultant:</strong>
-                        <span id="consultant1" class="text-uppercase"></span>
-                    </div>
-
-                    <div class="detail-line">
-                        <strong>Speciality:</strong>
-                        <span id="speciality1" class="text-uppercase"></span>
-                    </div>
-
-                </div>
-
-                <div class="details-right">
-
-                    <div class="detail-line">
-                        <strong>Date/Time:</strong>
-                        <span id="date1"></span>
-                    </div>
-
-                    <div class="detail-line">
-                        <strong>Consultation Charges:</strong>
-                        <span id="fee1"></span>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="entered-by">
-                <strong>Entered By:</strong>
-                <span id="receptionist1"></span>
-            </div>
-
+        <div class="entered-by">
+            <strong>Entered By:</strong>
+            <span id="receptionist"></span>
         </div>
 
     </div>
 
 
-    <script src="./js/receipt.js"></script>
+    <!-- ========================= -->
+    <!-- CLINIC COPY -->
+    <!-- ========================= -->
+
+    <div class="copy">
+
+        <div class="copy-title">
+            <span class="copy-title-text">CLINIC COPY</span>
+
+            <span class="receipt-number">
+                <strong>Receipt No:</strong>
+                <span id="receiptNo1"></span>
+            </span>
+        </div>
+
+        <div class="copy-row">
+
+            <div class="field mr">
+                <strong>MR No:</strong>
+                <span id="mrNo1"></span>
+            </div>
+
+            <div class="field name">
+                <strong>Patient:</strong>
+                <span id="name1" class="text-uppercase"></span>
+            </div>
+
+            <div class="field dob">
+                <strong>DOB:</strong>
+                <span id="dob1"></span>
+            </div>
+
+            <div class="field gender">
+                <strong>Gender:</strong>
+                <span id="gender1"></span>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="copy-row">
+
+            <div class="field address">
+                <strong>Address:</strong>
+                <span id="address1"></span>
+            </div>
+
+            <div class="field phone">
+                <strong>Ph:</strong>
+                <span id="phone1"></span>
+            </div>
+
+        </div>
+
+        <div class="details">
+
+            <div class="details-left">
+
+                <div class="detail-line">
+                    <strong>Consultant:</strong>
+                    <span id="consultant1" class="text-uppercase"></span>
+                </div>
+
+                <div class="detail-line">
+                    <strong>Speciality:</strong>
+                    <span id="speciality1" class="text-uppercase"></span>
+                </div>
+
+            </div>
+
+            <div class="details-right">
+
+                <div class="detail-line">
+                    <strong>Date/Time:</strong>
+                    <span id="date1"></span>
+                </div>
+
+                <div class="detail-line">
+                    <strong>Consultation Charges:</strong>
+                    <span id="fee1"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="entered-by">
+            <strong>Entered By:</strong>
+            <span id="receptionist1"></span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="./js/receipt.js"></script>
 
 </body>
 

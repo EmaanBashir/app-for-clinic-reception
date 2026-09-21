@@ -7,6 +7,7 @@ window.electronAPI.getLatestReceipt().then((result) => {
     const consultation = result.consultation;
     const patient = result.patient;
 
+    const receiptNo = consultation.consultationId;
     const mrNo = consultation.patientId;
 
     const dateTime = new Date(consultation.date).toLocaleString('en-GB', {
@@ -17,12 +18,16 @@ window.electronAPI.getLatestReceipt().then((result) => {
         minute: '2-digit'
     });
 
+    document.querySelector("#receiptNo").innerHTML = receiptNo;
     document.querySelector("#mrNo").innerHTML = mrNo;
     document.querySelector("#date").innerHTML = dateTime;
     document.querySelector("#fee").innerHTML = consultation.fee;
+
+    document.querySelector("#receiptNo1").innerHTML = receiptNo;
     document.querySelector("#mrNo1").innerHTML = mrNo;
     document.querySelector("#date1").innerHTML = dateTime;
     document.querySelector("#fee1").innerHTML = consultation.fee;
+    
     document.querySelector("#receptionist").innerHTML = consultation.receptionist || '';
     document.querySelector("#receptionist1").innerHTML = consultation.receptionist || '';
 

@@ -1,4 +1,4 @@
-// Get the max id to suggest next patient id
+// Get the max patient id to suggest next patient id
 let idInput = document.querySelector("#patientId");
 let id;
 
@@ -11,6 +11,19 @@ window.electronAPI.getNextPatientId().then((result) => {
     id = result.id;
     idInput.value = id + 1;
     idInput.max = id + 1;
+});
+
+// Get the next receipt number
+let receiptNoDisplay = document.querySelector("#receiptNo");
+
+window.electronAPI.getNextReceiptId().then((result) => {
+    if (!result.success) {
+        console.log(result.error);
+        return;
+    }
+
+    receiptNoDisplay.textContent =
+        result.id === null ? 1 : result.id + 1;
 });
 
 let patientDOB = document.querySelector("#patientDOB");
@@ -65,7 +78,7 @@ idInput.addEventListener('keyup', () => {
 
             if (result.patient) {
                 let patient = result.patient;
-            
+
                 patientDOB.value = patient.dob
                     ? new Date(patient.dob).toISOString().split('T')[0]
                     : '';

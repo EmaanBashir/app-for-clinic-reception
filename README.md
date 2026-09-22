@@ -1,14 +1,43 @@
 # Application for Clinic Reception
-A desktop application that generates and prints receipts and keeps record of patients in a clinic. 
+A Windows desktop application for clinic reception that manages patient records, consultation details, and receipts.
 
+The application allows reception staff to:
 
+- Log in using their reception credentials
+- Create new patient records
+- Search for existing patients using their MR number
+- Automatically populate existing patient information
+- Record consultations and consultation fees
+- Generate and print payment receipts
+- View patient consultation records
+- Filter consultation records by consultant and month
+- Display the total consultation fees for the selected month
+- Print the patient list
 
-Coded in *Electron Forge*: 
-- Html 
-- CSS 
-- Bootstrap 
-- Javascript
-- MySQL 
+## Technologies
+The application is built using:
+
+- Electron
+- Electron Forge
+- HTML
+- CSS
+- JavaScript
+- Bootstrap
+- MySQL
+
+The application uses Electron's preload and IPC mechanisms to communicate between the renderer and main processes.
+
+## Requirements
+For development you need:
+
+For development, you need:
+
+Node.js
+npm
+MySQL
+Git (optional, for version control)
+
+The application connects to a MySQL database named: eyemed_db
 
 ## How to run the Application
 - Download the code

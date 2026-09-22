@@ -264,10 +264,19 @@ ipcMain.handle('get-latest-receipt', () => {
       }
 
       const consultationQuery = `
-        SELECT consultationId, patientId, consultantId, fee, date, receptionist
-        FROM Consultations
-        ORDER BY consultationId DESC
-        LIMIT 1;
+          SELECT Consultations.consultationId,
+                Consultations.patientId,
+                Consultations.consultantId,
+                Consultations.fee,
+                Consultations.date,
+                Consultations.receptionist,
+                Consultants.name AS consultantName,
+                Consultants.speciality
+          FROM Consultations
+          INNER JOIN Consultants
+              ON Consultations.consultantId = Consultants.id
+          ORDER BY Consultations.consultationId DESC
+          LIMIT 1;
       `;
 
       connection.query(consultationQuery, (err, consultationRows) => {
@@ -344,15 +353,17 @@ ipcMain.handle('get-consultations', (event, consultantId, month) => {
 
     const query = `
       SELECT Consultations.patientId,
-             Patients.name,
-             Patients.dob,
-             Patients.gender,
-             Consultations.date,
-             Patients.phone,
-             Patients.address,
-             Consultations.fee
+            Patients.name,
+            Patients.dob,
+            Patients.gender,
+            Consultations.date,
+            Patients.phone,
+            Patients.address,
+            Consultations.fee,
+            Consultants.name AS consultantName
       FROM Consultations
       INNER JOIN Patients ON Consultations.patientId = Patients.id
+      INNER JOIN Consultants ON Consultations.consultantId = Consultants.id
       WHERE Consultations.consultantId = "${consultantId}"
       AND DATE_FORMAT(Consultations.date, '%Y-%m') = "${month}"
       ORDER BY Consultations.date;

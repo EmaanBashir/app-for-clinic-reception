@@ -27,25 +27,21 @@ window.electronAPI.getLatestReceipt().then((result) => {
     document.querySelector("#mrNo1").innerHTML = mrNo;
     document.querySelector("#date1").innerHTML = dateTime;
     document.querySelector("#fee1").innerHTML = consultation.fee;
-    
+
     document.querySelector("#receptionist").innerHTML = consultation.receptionist || '';
     document.querySelector("#receptionist1").innerHTML = consultation.receptionist || '';
 
-    switch (consultation.consultantId) {
-        case 0:
-            document.querySelector("#consultant").innerHTML = "Dr. Hamid Bashir";
-            document.querySelector("#speciality").innerHTML = "Medical Specialist";
-            document.querySelector("#consultant1").innerHTML = "Dr. Hamid Bashir";
-            document.querySelector("#speciality1").innerHTML = "Medical Specialist";
-            break;
+    document.querySelector("#consultant").innerHTML =
+        consultation.consultantName;
 
-        case 1:
-            document.querySelector("#consultant").innerHTML = "Dr. Naeem Altaf";
-            document.querySelector("#speciality").innerHTML = "Eye Specialist";
-            document.querySelector("#consultant1").innerHTML = "Dr. Naeem Altaf";
-            document.querySelector("#speciality1").innerHTML = "Eye Specialist";
-            break;
-    }
+    document.querySelector("#speciality").innerHTML =
+        consultation.speciality;
+
+    document.querySelector("#consultant1").innerHTML =
+        consultation.consultantName;
+
+    document.querySelector("#speciality1").innerHTML =
+        consultation.speciality;
 
     document.querySelector("#dob").innerHTML =
         patient.dob ? new Date(patient.dob).toLocaleDateString('en-GB') : '-';

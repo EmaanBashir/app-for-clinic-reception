@@ -9,9 +9,14 @@ let loadData = async (consultantId, month) => {
         month
     );
 
-    let consultantName = consultantId == 0
-        ? "Dr. Hamid Bashir"
-        : "Dr. Naeem Altaf";
+    if (!result.success) {
+        console.log(result.error);
+        return;
+    }
+
+    let consultantName = result.rows.length > 0
+        ? result.rows[0].consultantName
+        : "";
 
     let selectedDate = new Date(month + "-01");
 
@@ -49,13 +54,13 @@ let loadData = async (consultantId, month) => {
                         <th scope="row">${i + 1}</th>
                         <td>${result.rows[i].patientId}</td>
                         <td>${new Date(result.rows[i].date).toLocaleString('en-GB', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                        }).replace(',', '')}</td>
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        }).replace(',', '')}</td>
                         <td>${result.rows[i].name}</td>
                         <td>${result.rows[i].dob ? new Date(result.rows[i].dob).toLocaleDateString('en-GB') : '-'}</td>
                         <td>${gender}</td>

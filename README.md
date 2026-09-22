@@ -30,66 +30,101 @@ The application uses Electron's preload and IPC mechanisms to communicate betwee
 ## Requirements
 For development you need:
 
-For development, you need:
-
-Node.js
-npm
-MySQL
-Git (optional, for version control)
+- Node.js
+- npm
+- MySQL
+- XAMPP (if XAMPP is being used to run the local MySQL server)
+- Git (optional, for version control)
 
 The application connects to a MySQL database named: eyemed_db
 
-## How to run the Application
-- Download the code
-- Go to the folder containing src folder
-- npm install
+## How to Create a New Electron Application
+If a new Electron application needs to be created from scratch in the future, Electron Forge can be used to create the project structure.
+
+- Install Electron Forge globally:
+  npm install --global electron-forge
+- Create a new Electron application:
+  electron-forge init my-electron-app
+- Move into the new project:
+  cd my-electron-app
+- Start the application:
+  npm start
+
+Electron Forge can then be used to package and distribute the application.
+
+For a new project, the Electron version and other dependencies should be checked and kept reasonably current rather than relying on very old Electron packages.
+
+## Running the Application in Development
+- Clone or download the repository
+- Open a terminal in the project folder (folder containing src)
+- Install dependencies
+  npm install
 - Download XAMPP and start apache and mysql (If they dont start automatically)
-- Create db and required tables manually on localhost/phpmyadmin (DB structure given at the end)
-- Add username/password to the db manually. Use password = PASSWORD('actualpassword') in the insert query
-- npm start
+  (Apache is only required if you need to use phpMyAdmin through the XAMPP web interface. The Electron application itself does not require Apache.)
+- Start the application
+  npm start
 
-## How to create an electron application
-https://adityasridhar.com/posts/desktop-apps-with-html-css-javascript#:~:text=Electron%20can%20be%20used%20to%20build%20Desktop%20Apps%20with%20HTML,Code%20as%20a%20desktop%20application.
+(Make sure the required MYSQL database is running. The database can be accessed on localhost/phpmyadmin)
 
-- npm install -g electron-forge 
-- electron-forge init simple-desktop-app-electronjs
-- cd simple-desktop-app-electronjs
-- npm start
-
-## How to package the application
+## Packaging the Application
+To create a packaged version of the application without creating an installer:
 - npm run package
+The packaged application will be created in the out directory.
 
-## How to create an installer
-- npm run make <br>
+On Windows, the packaged application is generated under a directory similar to:
+out\clinicapp-win32-x64
 
-If images are included, they will not appear in the packaged application. In order to make the images appear,
-- npm i --save electron-compile 
-- Paste the following two lines at the start of the index.js file <br>
+The application can be launched using:
+clinicapp.exe
 
-
-import { addBypassChecker } from 'electron-compile';
-
-
-addBypassChecker((filePath) => { return filePath.indexOf(app.getAppPath()) === -1 && (/.jpg/.test(filePath) || /.jfif/.test(filePath) || /.png/.test(filePath)); })
-
-
-(This statement is used if jpg, jfif and png image types are used. Replace these with the required image type)
+## Creating the Windows Installer
+The project uses Electron Forge with the Squirrel Windows maker to create the installer.
+- npm run make
   
-## How to run the application on client computer
-- Install the application using the installer
+The installer will be created under:
+out\make\squirrel.windows\x64
+
+The installer is a file similar to:
+clinicapp-1.0.0 Setup.exe
+
+This is the file that should be provided to the client for installation.
+
+## Installing the Application on the Client Computer
 - Download XAMPP
 - Open XAMPP in admin mode
 - Check the boxes next to apache and mysql (This will start apache and mysql automatically, whenever the system boots.)
-- Create the db and required tables manually at localhost/phpmyadmin (DB structure given at the end)
-- Add username/password to the db manually. Use password = PASSWORD('actualpassword') in the insert query
-- Run the application
+  (Apache is only required if you need to use phpMyAdmin through the XAMPP web interface. The Electron application itself does not require Apache.)
+- Run the installer on the client computer.
+- Once installation is complete, launch the application from Windows.
+- Ensure that the required MySQL database is available on the client computer. The database can be accessed on localhost/phpmyadmin
 
-## Database structure
+The client's existing database should be preserved when updating the application.
+
+## Updating the Application
+
+When a new version of the application is created:
+
+- Build a new installer using:
+- npm run make
+- Provide the new Setup.exe to the client.
+- Install the new version on the client computer.
+
+The application should be tested before distributing a new version to the client.
+
+## Database
 **Database name:** eyemed_db <br>
 **Table:** Consultations <br>
-![image](https://user-images.githubusercontent.com/56760682/188235247-76c71dba-9567-4d15-9156-95ec5b7d5eff.png) <br>
+<img width="1227" height="247" alt="image" src="https://github.com/user-attachments/assets/ebd165b5-eda6-46ad-81d1-9cae4a8b7053" />
+ <br>
 **Table:** Patients <br>
-![image](https://user-images.githubusercontent.com/56760682/188235493-3cbe4cae-cca4-435b-8c6e-b9e3804d7451.png) <br>
+<img width="908" height="245" alt="image" src="https://github.com/user-attachments/assets/024b2bb8-8747-4401-bcce-bf2187eb37a1" />
+<br>
 **Table:** Users <br>
-![image](https://user-images.githubusercontent.com/56760682/188235536-cc828466-37de-4bd3-bb79-b61a7ae65524.png) <br>
+<img width="953" height="142" alt="image" src="https://github.com/user-attachments/assets/e0e0f1c4-a491-4cae-835b-482c80ec95e5" />
+ <br>
+
+
+
+
+
 

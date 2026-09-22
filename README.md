@@ -42,12 +42,19 @@ The application connects to a MySQL database named: eyemed_db
 If a new Electron application needs to be created from scratch in the future, Electron Forge can be used to create the project structure.
 
 - Install Electron Forge globally:
+  
   npm install --global electron-forge
+  
 - Create a new Electron application:
+  
   electron-forge init my-electron-app
+  
 - Move into the new project:
+  
   cd my-electron-app
+  
 - Start the application:
+  
   npm start
 
 Electron Forge can then be used to package and distribute the application.

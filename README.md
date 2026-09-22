@@ -129,6 +129,9 @@ The application should be tested before distributing a new version to the client
 
 ## Database
 **Database name:** eyemed_db <br>
+**Table:** Consultants <br>
+<img width="920" height="142" alt="image" src="https://github.com/user-attachments/assets/4bb8303f-2aad-4a08-9d3d-67213aaa9762" />
+ <br>
 **Table:** Consultations <br>
 <img width="1188" height="245" alt="image" src="https://github.com/user-attachments/assets/3b248d6e-338f-4b4f-ac2f-3e84eef8fbc0" />
  <br>
@@ -138,6 +141,8 @@ The application should be tested before distributing a new version to the client
 **Table:** Users <br>
 <img width="953" height="142" alt="image" src="https://github.com/user-attachments/assets/e0e0f1c4-a491-4cae-835b-482c80ec95e5" />
  <br>
+
+ 
 
 
 

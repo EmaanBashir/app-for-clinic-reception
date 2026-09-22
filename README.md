@@ -65,17 +65,24 @@ For a new project, the Electron version and other dependencies should be checked
 - Clone or download the repository
 - Open a terminal in the project folder (folder containing src)
 - Install dependencies
+  
   npm install
+
 - Download XAMPP and start apache and mysql (If they dont start automatically)
+  
   (Apache is only required if you need to use phpMyAdmin through the XAMPP web interface. The Electron application itself does not require Apache.)
+  
 - Start the application
+  
   npm start
 
 (Make sure the required MYSQL database is running. The database can be accessed on localhost/phpmyadmin)
 
 ## Packaging the Application
 To create a packaged version of the application without creating an installer:
+
 - npm run package
+  
 The packaged application will be created in the out directory.
 
 On Windows, the packaged application is generated under a directory similar to:
@@ -100,7 +107,9 @@ This is the file that should be provided to the client for installation.
 - Download XAMPP
 - Open XAMPP in admin mode
 - Check the boxes next to apache and mysql (This will start apache and mysql automatically, whenever the system boots.)
+  
   (Apache is only required if you need to use phpMyAdmin through the XAMPP web interface. The Electron application itself does not require Apache.)
+  
 - Run the installer on the client computer.
 - Once installation is complete, launch the application from Windows.
 - Ensure that the required MySQL database is available on the client computer. The database can be accessed on localhost/phpmyadmin

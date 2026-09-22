@@ -115,7 +115,7 @@ function initializeDatabase() {
                                   const firstUser = `
                                       INSERT INTO Users (username, password, name)
                                       SELECT 'eyemed',
-                                             '*B1F54CD885D1BFCEA968F2F22E2BE96051D7C4A4',
+                                             '*BA216BC3B991511431B8A16E30A81C6F3D3A1E54',
                                              'Wajid'
                                       WHERE NOT EXISTS (
                                           SELECT 1 FROM users

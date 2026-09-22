@@ -66,7 +66,7 @@ For a new project, the Electron version and other dependencies should be checked
 - Open a terminal in the project folder (folder containing src)
 - Install dependencies
   
-  npm install
+  npm install --allow-git=all
 
 - Download XAMPP and start apache and mysql (If they dont start automatically)
   

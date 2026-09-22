@@ -3,51 +3,51 @@ const mysql = require('mysql');
 
 function initializeDatabase() {
   return new Promise((resolve, reject) => {
-      // First connect to MySQL without selecting a database.
-      const connection = mysql.createConnection({
-          host: 'localhost',
-          user: 'root',
-          password: null
-      });
+    // First connect to MySQL without selecting a database.
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null
+    });
 
-      connection.connect((err) => {
-          if (err) {
-              console.log('Unable to connect to MySQL:', err);
-              reject(err);
-              return;
-          }
+    connection.connect((err) => {
+      if (err) {
+        console.log('Unable to connect to MySQL:', err);
+        reject(err);
+        return;
+      }
 
-          // Create the application database if it does not already exist.
-          connection.query(
-              `CREATE DATABASE IF NOT EXISTS eyemed_db
+      // Create the application database if it does not already exist.
+      connection.query(
+        `CREATE DATABASE IF NOT EXISTS eyemed_db
                DEFAULT CHARACTER SET utf8mb4
                COLLATE utf8mb4_general_ci`,
-              (err) => {
-                  if (err) {
-                      console.log('Unable to create database:', err);
-                      connection.end();
-                      reject(err);
-                      return;
-                  }
+        (err) => {
+          if (err) {
+            console.log('Unable to create database:', err);
+            connection.end();
+            reject(err);
+            return;
+          }
 
-                  connection.end();
+          connection.end();
 
-                  // Now connect to the newly created/existing database.
-                  const db = mysql.createConnection({
-                      host: 'localhost',
-                      user: 'root',
-                      password: null,
-                      database: 'eyemed_db'
-                  });
+          // Now connect to the newly created/existing database.
+          const db = mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: null,
+            database: 'eyemed_db'
+          });
 
-                  db.connect((err) => {
-                      if (err) {
-                          console.log('Unable to connect to eyemed_db:', err);
-                          reject(err);
-                          return;
-                      }
+          db.connect((err) => {
+            if (err) {
+              console.log('Unable to connect to eyemed_db:', err);
+              reject(err);
+              return;
+            }
 
-                      const createPatientsTable = `
+            const createPatientsTable = `
                       CREATE TABLE IF NOT EXISTS Patients (
                           id varchar(12) NOT NULL,
                           name varchar(30) NOT NULL,
@@ -61,7 +61,7 @@ function initializeDatabase() {
                       COLLATE=utf8mb4_general_ci
                   `;
 
-                  const createConsultationsTable = `
+            const createConsultationsTable = `
                   CREATE TABLE IF NOT EXISTS Consultations (
                       consultationId int(11) NOT NULL AUTO_INCREMENT,
                       patientId varchar(12) NOT NULL,
@@ -75,7 +75,7 @@ function initializeDatabase() {
                   COLLATE=utf8mb4_general_ci
               `;
 
-                      const createUsersTable = `
+            const createUsersTable = `
                           CREATE TABLE IF NOT EXISTS Users (
                               username varchar(20) NOT NULL,
                               password varchar(45) NOT NULL,
@@ -86,61 +86,97 @@ function initializeDatabase() {
                           COLLATE=utf8mb4_general_ci
                       `;
 
-                      db.query(createPatientsTable, (err) => {
-                          if (err) {
-                              console.log('Unable to create patients table:', err);
-                              db.end();
-                              reject(err);
-                              return;
-                          }
+            const createConsultantsTable = `
+                          CREATE TABLE IF NOT EXISTS Consultants (
+                              id int(11) NOT NULL,
+                              name varchar(60) NOT NULL,
+                              speciality varchar(80) NOT NULL,
+                              PRIMARY KEY (id)
+                          ) ENGINE=InnoDB
+                          DEFAULT CHARSET=utf8mb4
+                          COLLATE=utf8mb4_general_ci
+                      `;
 
-                          db.query(createConsultationsTable, (err) => {
-                              if (err) {
-                                  console.log('Unable to create consultations table:', err);
-                                  db.end();
-                                  reject(err);
-                                  return;
-                              }
-
-                              db.query(createUsersTable, (err) => {
-                                  if (err) {
-                                      console.log('Unable to create users table:', err);
-                                      db.end();
-                                      reject(err);
-                                      return;
-                                  }
-
-                                  // Create the first user only if the users
-                                  // table is currently empty.
-                                  const firstUser = `
-                                      INSERT INTO Users (username, password, name)
-                                      SELECT 'eyemed',
-                                             '*BA216BC3B991511431B8A16E30A81C6F3D3A1E54',
-                                             'Wajid'
-                                      WHERE NOT EXISTS (
-                                          SELECT 1 FROM users
-                                      )
-                                  `;
-
-                                  db.query(firstUser, (err) => {
-                                      db.end();
-
-                                      if (err) {
-                                          console.log('Unable to create first user:', err);
-                                          reject(err);
-                                          return;
-                                      }
-
-                                      console.log('Database initialization complete.');
-                                      resolve();
-                                  });
-                              });
-                          });
-                      });
-                  });
+            db.query(createPatientsTable, (err) => {
+              if (err) {
+                console.log('Unable to create patients table:', err);
+                db.end();
+                reject(err);
+                return;
               }
-          );
-      });
+
+              db.query(createConsultationsTable, (err) => {
+                if (err) {
+                  console.log('Unable to create consultations table:', err);
+                  db.end();
+                  reject(err);
+                  return;
+                }
+
+                db.query(createUsersTable, (err) => {
+                  if (err) {
+                    console.log('Unable to create users table:', err);
+                    db.end();
+                    reject(err);
+                    return;
+                  }
+
+                  db.query(createConsultantsTable, (err) => {
+                    if (err) {
+                      console.log('Unable to create consultants table:', err);
+                      db.end();
+                      reject(err);
+                      return;
+                    }
+
+                    const firstConsultants = `
+            INSERT IGNORE INTO Consultants (id, name, speciality)
+            VALUES
+                (0, 'Dr. Hamid Bashir', 'Medical Specialist'),
+                (1, 'Dr. Naeem Altaf', 'Eye Specialist')
+        `;
+
+                    db.query(firstConsultants, (err) => {
+                      if (err) {
+                        console.log('Unable to create default consultants:', err);
+                        db.end();
+                        reject(err);
+                        return;
+                      }
+
+                      // Create the first user only if the users
+                      // table is currently empty.
+                      const firstUser = `
+                INSERT INTO Users (username, password, name)
+                SELECT 'eyemed',
+                       '*BA216BC3B991511431B8A16E30A81C6F3D3A1E54',
+                       'Wajid'
+                WHERE NOT EXISTS (
+                    SELECT 1 FROM users
+                )
+            `;
+
+                      db.query(firstUser, (err) => {
+                        db.end();
+
+                        if (err) {
+                          console.log('Unable to create first user:', err);
+                          reject(err);
+                          return;
+                        }
+
+                        console.log('Database initialization complete.');
+                        resolve();
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        }
+      );
+    });
   });
 }
 
@@ -398,6 +434,54 @@ ipcMain.on('print-receipt-ready', () => {
       receiptWindow = null;
     }
   );
+});
+
+ipcMain.handle('get-consultants', () => {
+  return new Promise((resolve) => {
+    const connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: null,
+      database: 'eyemed_db'
+    });
+
+    connection.connect((err) => {
+      if (err) {
+        console.log(err.stack);
+        resolve({
+          success: false,
+          error: 'Database connection failed'
+        });
+        return;
+      }
+
+      const query = `
+        SELECT id, name, speciality
+        FROM Consultants
+        ORDER BY id
+      `;
+
+      connection.query(query, (err, rows) => {
+        connection.end();
+
+        if (err) {
+          console.log('An error occurred performing the consultants query.');
+          console.log(err.stack);
+
+          resolve({
+            success: false,
+            error: 'Database query failed'
+          });
+          return;
+        }
+
+        resolve({
+          success: true,
+          consultants: rows
+        });
+      });
+    });
+  });
 });
 
 ipcMain.handle('get-next-patient-id', () => {

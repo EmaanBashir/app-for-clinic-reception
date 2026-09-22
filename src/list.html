@@ -11,222 +11,229 @@
     <link rel="stylesheet" type="text/css"
         href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
 
-    <style>
-        /* =========================
-           SCREEN
-           ========================= */
+<style>
+    /* =========================
+       SCREEN
+       ========================= */
+
+    body {
+        background-color: #f5f5f5;
+    }
+
+    .img {
+        background-size: cover;
+        background-position: center center;
+        background-attachment: fixed;
+    }
+
+    .list-card {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        padding: 35px;
+    }
+
+    .page-title {
+        margin-top: 10px;
+        margin-bottom: 25px;
+    }
+
+    .filter-row {
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+    }
+
+    th {
+        white-space: nowrap;
+    }
+
+    td {
+        vertical-align: middle;
+    }
+
+    .table-container {
+        width: 100%;
+    }
+
+    .total-fee {
+        margin-top: 10px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    #currentMonth {
+        display: none;
+    }
+
+
+    /* =========================
+       PRINT
+       ========================= */
+
+    @media print {
+
+        @page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
+        html,
+        body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            background: white !important;
+        }
 
         body {
-            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            font-size: 9px;
+            color: #000;
         }
 
-        .img {
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-        }
-
+        /* Remove screen styling */
         .list-card {
-            margin-top: 40px;
-            margin-bottom: 40px;
-            padding: 35px;
-        }
-
-        .page-title {
-            margin-top: 10px;
-            margin-bottom: 25px;
-        }
-
-        .filter-row {
-            margin-bottom: 20px;
-        }
-
-        table {
             width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0;
+            border: none !important;
+            box-shadow: none !important;
+            background: white !important;
         }
 
-        th {
-            white-space: nowrap;
+        /* Hide navigation and filters */
+        #backBtn,
+        #printBtn,
+        .filter-row {
+            display: none !important;
         }
 
-        td {
-            vertical-align: middle;
+        /* Compact heading */
+        .page-title {
+            font-size: 15px;
+            margin: 0 0 6px 0;
+            text-align: center;
+        }
+
+        #currentMonth {
+            display: block;
+            font-size: 11px;
+            margin: 0 0 5px 0 !important;
+            text-align: center;
         }
 
         .table-container {
             width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: visible !important;
+        }
+
+        .table-responsive-xxl {
+            overflow: visible !important;
+        }
+
+        table {
+            width: 100% !important;
+            margin: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed;
+            font-size: 8px;
+        }
+
+        /* Compact table cells */
+        table th,
+        table td {
+            padding: 3px 4px !important;
+            line-height: 1.15;
+            border: 1px solid #999 !important;
+            vertical-align: middle;
+        }
+
+        table thead {
+            display: table-header-group;
+        }
+
+        table tbody tr {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        table th {
+            font-weight: bold;
+            white-space: nowrap;
+            background: #eee !important;
+        }
+
+        /* Column widths */
+        table th:nth-child(1),
+        table td:nth-child(1) {
+            width: 3.5%;
+        }
+
+        table th:nth-child(2),
+        table td:nth-child(2) {
+            width: 8%;
+        }
+
+        table th:nth-child(3),
+        table td:nth-child(3) {
+            width: 12%;
+        }
+
+        table th:nth-child(4),
+        table td:nth-child(4) {
+            width: 14%;
+        }
+
+        table th:nth-child(5),
+        table td:nth-child(5) {
+            width: 9%;
+        }
+
+        table th:nth-child(6),
+        table td:nth-child(6) {
+            width: 6%;
+        }
+
+        table th:nth-child(7),
+        table td:nth-child(7) {
+            width: 11%;
+        }
+
+        table th:nth-child(8),
+        table td:nth-child(8) {
+            width: 26.5%;
+        }
+
+        table th:nth-child(9),
+        table td:nth-child(9) {
+            width: 10%;
+        }
+
+        /* Keep most long values on one line */
+        table td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Allow long addresses to wrap */
+        table td:nth-child(8) {
+            white-space: normal;
+            overflow-wrap: break-word;
+            word-break: normal;
         }
 
         .total-fee {
-            margin-top: 10px;
-            font-size: 15px;
-            font-weight: bold;
+            font-size: 10px;
+            margin-top: 5px;
         }
-
-        #currentMonth {
-            display: none;
-        }
-
-
-        /* =========================
-           PRINT
-           ========================= */
-
-        @media print {
-
-            @page {
-                size: A4 landscape;
-                margin: 8mm;
-            }
-
-            html,
-            body {
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                background: white !important;
-            }
-
-            body {
-                font-family: Arial, sans-serif;
-                font-size: 9px;
-                color: #000;
-            }
-
-            /* Remove screen styling */
-            .list-card {
-                width: 100%;
-                max-width: none;
-                margin: 0;
-                padding: 0;
-                border: none !important;
-                box-shadow: none !important;
-                background: white !important;
-            }
-
-            /* Hide navigation and filters */
-            #backBtn,
-            #printBtn,
-            .filter-row {
-                display: none !important;
-            }
-
-            /* Compact heading */
-            .page-title {
-                font-size: 15px;
-                margin: 0 0 6px 0;
-                text-align: center;
-            }
-
-            #currentMonth {
-                display: block;
-                font-size: 11px;
-                margin: 0 0 5px 0 !important;
-                text-align: center;
-            }
-
-            .table-container {
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                overflow: visible !important;
-            }
-
-            .table-responsive-xxl {
-                overflow: visible !important;
-            }
-
-            table {
-                width: 100% !important;
-                margin: 0 !important;
-                border-collapse: collapse !important;
-                table-layout: fixed;
-                font-size: 8px;
-            }
-
-            /* Compact table cells */
-            table th,
-            table td {
-                padding: 3px 4px !important;
-                line-height: 1.15;
-                border: 1px solid #999 !important;
-                vertical-align: middle;
-            }
-
-            table thead {
-                display: table-header-group;
-            }
-
-            table tbody tr {
-                break-inside: avoid;
-                page-break-inside: avoid;
-            }
-
-            table th {
-                font-weight: bold;
-                white-space: nowrap;
-                background: #eee !important;
-            }
-
-            /* Column widths */
-            table th:nth-child(1),
-            table td:nth-child(1) {
-                width: 4%;
-            }
-
-            table th:nth-child(2),
-            table td:nth-child(2) {
-                width: 9%;
-            }
-
-            table th:nth-child(3),
-            table td:nth-child(3) {
-                width: 13%;
-            }
-
-            table th:nth-child(4),
-            table td:nth-child(4) {
-                width: 15%;
-            }
-
-            table th:nth-child(5),
-            table td:nth-child(5) {
-                width: 10%;
-            }
-
-            table th:nth-child(6),
-            table td:nth-child(6) {
-                width: 7%;
-            }
-
-            table th:nth-child(7),
-            table td:nth-child(7) {
-                width: 12%;
-            }
-
-            table th:nth-child(8),
-            table td:nth-child(8) {
-                width: 20%;
-            }
-
-            table th:nth-child(9),
-            table td:nth-child(9) {
-                width: 10%;
-            }
-
-            /* Keep long values from creating tall rows */
-            table td {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-            }
-
-            .total-fee {
-                font-size: 10px;
-                margin-top: 5px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 
 

@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
         password
     }),
 
+    getConsultants: () => ipcRenderer.invoke('get-consultants'),
+
     getLatestReceipt: () => ipcRenderer.invoke('get-latest-receipt'),
 
     getNextPatientId: () => ipcRenderer.invoke('get-next-patient-id'),

@@ -24,3 +24,23 @@
 	});
 
 })(jQuery);
+
+document.addEventListener("DOMContentLoaded", () => {
+    window.electronAPI.getConsultants().then((result) => {
+        if (!result.success) {
+            console.log(result.error);
+            return;
+        }
+
+        const consultantSelect = document.querySelector("#consultant");
+
+        result.consultants.forEach((consultant) => {
+            const option = document.createElement("option");
+
+            option.value = consultant.id;
+            option.textContent = consultant.name;
+
+            consultantSelect.appendChild(option);
+        });
+    });
+});
